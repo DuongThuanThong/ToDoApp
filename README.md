@@ -36,9 +36,13 @@ ToDoApp là app quản lý việc cá nhân, lấy cảm hứng từ TickTick, T
 |---|---|
 | ![Ma trận](screenshots/matrix.png) | ![Mini](screenshots/mini.png) |
 
-| Lịch tháng | Hướng dẫn trong app |
+| Lịch tháng | Kanban |
 |---|---|
-| ![Lịch](screenshots/calendar.png) | ![Hướng dẫn](screenshots/help.png) |
+| ![Lịch](screenshots/calendar.png) | ![Kanban](screenshots/kanban.png) |
+
+| Timeline 14 ngày | Hướng dẫn trong app |
+|---|---|
+| ![Timeline](screenshots/timeline.png) | ![Hướng dẫn](screenshots/help.png) |
 
 ---
 
