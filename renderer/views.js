@@ -56,9 +56,9 @@ function listView() {
   if (!tasks.length) return h('div', { class: 'empty' }, 'Chưa có việc nào. Gõ vào ô thêm việc ở trên — thử: Họp team #cv !cao 15h mai ~45p');
   const box = h('div');
   for (const t of tasks) {
-    box.append(row(t));
-    const kids = kidsOf(t.id);   // việc con nằm ngay dưới cha + có đường nối
-    kids.forEach((k, i) => box.append(row(k, { sub: true, last: i === kids.length - 1 })));
+    const kids = kidsOf(t.id);   // việc con nằm ngay dưới cha + có đường nối, thu gọn được
+    box.append(row(t, { fold: kids.length }));
+    if (!ui.fold[t.id]) kids.forEach((k, i) => box.append(row(k, { sub: true, last: i === kids.length - 1 })));
   }
   return box;
 }

@@ -26,6 +26,17 @@ const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); r
 const startOfDay = (d) => { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; };
 const PRIO = ['Không', 'Thấp', 'Trung bình', 'Cao'];
 const WEEK = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+/* Các "danh sách" hệ thống — MỘT nguồn duy nhất cho sidebar, tiêu đề topbar và bộ chọn ở mini
+   (trước đây tên/mục nằm rải ở sidebar + topbar + mini -> sửa một chỗ là lệch chỗ khác) */
+const VIEWS = [
+  ['myday', '☀', 'Hôm nay của tôi'],
+  ['today', '◉', 'Hôm nay'],
+  ['upcoming', '▤', 'Sắp tới'],
+  ['nodate', '▢', 'Chưa có hạn'],
+  ['completed', '✓', 'Đã hoàn thành'],
+  ['trash', '🗑', 'Đã xoá'],
+];
+const viewName = (v) => (VIEWS.find((x) => x[0] === v) || [])[2];
 const ICON_SRC = '../icon.png';   // logo người dùng (CSP img-src có 'self' + file:)
 
 /* khớp tổ hợp phím đã gán ('mod+w') với sự kiện bàn phím — hàm thuần, test được bằng node */
@@ -85,6 +96,8 @@ const F_EMPTY = { due: '', from: '', to: '', month: '', year: '', prio: '', tag:
 const ui = {
   view: 'myday', mode: 'list', sort: 'manual', q: '', openId: null, modal: null,
   cal: new Date(), miniCollapsed: false, miniEdge: 'right',
+  miniPick: false,                 // bộ chọn danh sách ở thanh tiêu đề mini đang mở
+  fold: {},                        // id việc cha -> true = đang THU GỌN việc con (mặc định mở)
   panel: false,                    // bảng lọc đang mở
   f: { ...F_EMPTY },               // bộ lọc có cấu trúc (bảng lọc, không gõ tay)
   confirm: null,                   // id việc đang chờ xác nhận xoá
@@ -211,7 +224,7 @@ function fChips() {
 fChips.n = (k) => k;   // giữ khoá để chip xoá đúng mục
 
 function currentTasks() {
-  let list = T.view(db.tasks, ui.view);
+  let list = viewTasks(ui.view);
   if (fActive().length) list = list.filter(matches);
   if (ui.q.trim()) list = list.filter(searchMatch);
   if (ui.sort === 'priority') list = [...list].sort((a, b) => (b.priority || 0) - (a.priority || 0));
@@ -220,6 +233,13 @@ function currentTasks() {
   return list;
 }
 const kidsOf = (id) => db.tasks.filter((t) => t.parentId === id);
+/* T.view() gọi qua contextBridge nên trả về BẢN SAO của từng việc — sửa vào bản sao thì db không đổi
+   (nút ☀ My Day bấm không ăn, tick trong danh sách không lưu...). Mọi chỗ hiển thị việc phải đi qua
+   hàm này để dòng nhận đúng object THẬT trong db. */
+function viewTasks(name) {
+  const byId = new Map(db.tasks.map((t) => [t.id, t]));
+  return T.view(db.tasks, name).map((t) => byId.get(t.id) || t);
+}
 
 /* self-check: chỉ chạy khi mở file bằng node (không phải renderer) */
 if (typeof module !== 'undefined' && require.main === module) {

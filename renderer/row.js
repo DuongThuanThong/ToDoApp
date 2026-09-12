@@ -68,10 +68,17 @@ function makeDraggable(el, id) {
   });
 }
 
-function row(t, { sub = false, last = false } = {}) {
+function row(t, { sub = false, last = false, fold = 0 } = {}) {
   const p = T.subtaskProgress(db.tasks, t.id);
   const late = t.due && !t.done && new Date(t.due) < new Date();
+  const shut = !!ui.fold[t.id];
   const r = h('div', { class: 'row' + (t.done ? ' done' : '') + (sub ? ' sub' : '') + (last ? ' sub-last' : ''), dataset: { id: t.id } },
+    // nút thu gọn/mở rộng việc con (kiểu mở list). Không có việc con thì vẫn giữ chỗ trống để các dòng thẳng hàng.
+    !sub ? h('button', {
+      class: 'kids-tg' + (fold ? '' : ' none'),
+      title: fold ? (shut ? `Mở ${fold} việc con` : `Thu gọn ${fold} việc con`) : '',
+      onclick: (e) => { e.stopPropagation(); if (fold) foldKids(t.id); },
+    }, fold ? (shut ? '▸' : '▾') : '') : null,
     h('div', { class: 'pdot p' + (t.priority || 0), title: 'Ưu tiên: ' + PRIO[t.priority || 0] }),
     h('button', { class: 'cb' + (t.done ? ' on' : ''), title: 'Hoàn thành', onclick: (e) => { e.stopPropagation(); toggleTask(t); askParent(t); } }, '✓'),
     h('div', { class: 'row-main', title: 'Bấm để mở chi tiết', onclick: () => { if (Date.now() - dragEnd < 350) return; ui.openId = t.id; render(); } },

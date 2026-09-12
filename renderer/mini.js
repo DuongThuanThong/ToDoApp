@@ -25,24 +25,34 @@ function miniView() {
       h('button', { class: 'btn ghost icon sm', title: 'Ẩn', onclick: () => API.mini.hide() }, '✕')),
     detailView());
 
-  const tasks = T.view(db.tasks, 'myday').filter((t) => !t.parentId);
+  const tasks = viewTasks(ui.view).filter((t) => !t.parentId);
   const i = h('input', {
     class: 'input', placeholder: 'Thêm nhanh… (Enter)',
     onkeydown: (e) => { if (e.key === 'Enter') { addTask(e.target.value); e.target.value = ''; } },
   });
   miniAddInput = i;
+  const empty = ui.view === 'completed' ? 'Chưa hoàn thành việc nào.' : ['myday', 'today'].includes(ui.view) ? 'Hết việc 🎉' : 'Không có việc nào.';
   const box = h('div', { class: 'mini' },
     h('div', { class: 'mini-head drag' },
       h('img', { class: 'brand-ic', src: ICON_SRC, alt: '' }),
-      h('span', { class: 'grow', title: 'Danh sách việc bạn tự chọn cho hôm nay' }, 'Hôm nay của tôi'),
+      // Tiêu đề = nút đổi danh sách: bấm ra list để chọn đang xem gì (không còn cứng "Hôm nay của tôi")
+      h('button', {
+        class: 'mini-title', title: 'Bấm để đổi danh sách đang hiển thị',
+        onclick: () => { ui.miniPick = !ui.miniPick; render(); },
+      }, viewName(ui.view), h('span', { class: 'caret' }, '▾')),
       h('button', { class: 'btn ghost icon sm', title: 'Mở app chính', onclick: () => API.openMain() }, '⧉'),
       h('button', { class: 'btn ghost icon sm', title: 'Thu vào mép', onclick: () => API.mini.collapse() }, arrow),
       h('button', { class: 'btn ghost icon sm', title: 'Ẩn', onclick: () => API.mini.hide() }, '✕')),
+    ui.miniPick ? h('div', { class: 'mini-vpick' }, ...VIEWS.filter(([id]) => id !== 'trash').map(([id, ic, nm]) =>
+      h('button', {
+        class: 'nav' + (ui.view === id ? ' on' : ''), title: NAV_HELP[id] || nm,
+        onclick: () => { ui.view = id; ui.miniPick = false; render(); },
+      }, h('span', { class: 'ic' }, ic), h('span', null, nm), h('span', { class: 'ct' }, T.view(db.tasks, id).length || '')))) : null,
     h('div', { class: 'mini-add' }, i),
     h('div', { class: 'mini-list' }, tasks.length ? tasks.flatMap((t) => {
       const kids = kidsOf(t.id);
-      return [row(t), ...kids.map((k, i) => row(k, { sub: true, last: i === kids.length - 1 }))];
-    }) : h('div', { class: 'empty', style: { padding: '1.5rem .5rem' } }, 'Hết việc 🎉')),
+      return [row(t, { fold: kids.length }), ...(ui.fold[t.id] ? [] : kids.map((k, i) => row(k, { sub: true, last: i === kids.length - 1 })))];
+    }) : h('div', { class: 'empty', style: { padding: '1.5rem .5rem' } }, empty)),
     h('div', { class: 'mini-foot muted' }, h('span', null, tasks.filter((t) => !t.done).length + ' việc'), h('span', { class: 'grow', style: { flex: 1 } }), h('span', null, new Date().toLocaleDateString('vi-VN'))));
   if (db.settings.peek !== false) box.addEventListener('mouseleave', () => API.mini.peek(false));
   return box;

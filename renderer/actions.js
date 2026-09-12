@@ -91,3 +91,5 @@ function toggleMyDay(t) {
   patch(t, { myDay: on ? null : ymd(new Date()) });
   toast(on ? 'Đã bỏ khỏi "Hôm nay của tôi"' : 'Đã thêm vào "Hôm nay của tôi"', t.title, [], 3000);
 }
+// thu gọn / mở rộng việc con của một việc cha (kiểu mở list). Trạng thái chỉ trong phiên, không lưu DB.
+function foldKids(id) { ui.fold[id] = !ui.fold[id]; render(); }

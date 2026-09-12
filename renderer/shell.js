@@ -2,10 +2,10 @@
 /* Khung app: sidebar, topbar, thanh thêm việc, bảng lọc, bảng xác nhận xoá, hàm render tổng. */
 /* ---------------- sidebar ---------------- */
 const NAV_HELP = {
-  myday: 'Danh sách việc BẠN TỰ CHỌN cho hôm nay (bấm nút ☁ My Day ở mỗi việc để thêm vào)',
-  today: 'Việc có HẠN rơi vào hôm nay (tự động theo ngày đến hạn)',
+  myday: 'Danh sách việc BẠN TỰ CHỌN cho hôm nay (bấm nút ☁ My Day ở mỗi việc để thêm vào, ☀ để bỏ ra)',
+  today: 'Việc có HẠN hôm nay, kể cả việc đã trễ hạn (tự động theo ngày đến hạn)',
   upcoming: 'Việc có hạn trong những ngày tới, gom theo từng ngày',
-  nodate: 'Việc chưa đặt hạn',
+  nodate: 'Việc chưa đặt ngày đến hạn',
   completed: 'Log việc đã xong, gom theo từng ngày',
   trash: 'Việc đã xoá — vẫn khôi phục được, chỉ mất khi bạn dọn sạch',
 };
@@ -17,9 +17,8 @@ function sidebar() {
   const side = h('aside', { class: 'sidebar' },
     h('div', { class: 'brand drag' }, h('img', { class: 'brand-ic', src: ICON_SRC, alt: '' }), h('span', null, 'ToDoApp')),
     h('div', { class: 'side-scroll' },
-      nav('myday', '☀', 'Hôm nay của tôi'), nav('today', '◉', 'Hôm nay'), nav('upcoming', '▤', 'Sắp tới'),
-      nav('nodate', '▢', 'Không ngày'), nav('completed', '✓', 'Đã hoàn thành'), nav('trash', '🗑', 'Đã xoá'),
-      h('div', { class: 'side-hint' }, '☀ = việc bạn tự chọn · ◉ = việc đến hạn hôm nay'),
+      ...VIEWS.map((v) => nav(...v)),
+      h('div', { class: 'side-hint' }, '☀ = việc bạn tự chọn · ◉ = việc đến hạn hôm nay (kể cả trễ)'),
       h('div', { class: 'side-lbl' }, 'Danh sách'),
       ...db.lists.map((l) => h('button', { class: 'nav' + (ui.view === l.id ? ' on' : ''), onclick: () => { ui.view = l.id; render(); } },
         h('span', { class: 'ic' }, '#'), h('span', null, l.name), h('span', { class: 'ct' }, count(l.id) || ''),
@@ -39,8 +38,8 @@ function sidebar() {
 const MODES = [['list', 'Danh sách'], ['kanban', 'Kanban'], ['calendar', 'Lịch'], ['timeline', 'Timeline'], ['matrix', 'Ma trận']];
 
 function topbar() {
-  const names = { myday: 'Hôm nay của tôi', today: 'Hôm nay', upcoming: 'Sắp tới', nodate: 'Không ngày', completed: 'Đã hoàn thành', trash: 'Đã xoá' };
-  const title = names[ui.view] || db.lists.find((l) => l.id === ui.view)?.name || 'Việc';
+  const names = viewName;
+  const title = names(ui.view) || db.lists.find((l) => l.id === ui.view)?.name || 'Việc';
   const canSchedule = ['myday', 'today', 'upcoming'].includes(ui.view);
   const nf = fActive().length + (ui.q.trim() ? 1 : 0);
   const nTasks = ui.view === 'trash' ? (db.trash || []).length : currentTasks().length;
