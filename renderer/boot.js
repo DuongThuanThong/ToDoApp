@@ -24,8 +24,9 @@ if (API) {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (!ui.modal && !ui.openId) return;
-      // trong chi tiết: Esc = quay lại (việc con -> chi tiết cha để thêm tiếp việc con)
-      if (ui.modal) ui.modal = null; else detailBack();
+      // Phải render(): trước đây chỉ xoá ui.modal nên hộp thoại vẫn nằm trên màn hình
+      // (Esc trông như không có tác dụng), và cái overlay còn lại còn che luôn các dòng việc.
+      if (ui.modal) { ui.modal = null; render(); } else detailBack();
       return;
     }
     // phím tắt trong app: tất cả lấy từ db.settings.keys -> người dùng gán lại ở Tuỳ biến

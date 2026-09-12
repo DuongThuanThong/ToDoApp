@@ -350,6 +350,14 @@ body.mini .kids-tg { width: .72rem; font-size: .6rem; }
 .keylist { display: flex; flex-direction: column; gap: .25rem; }
 .keyrow { display: flex; align-items: center; gap: .35rem; font-size: .8rem; }
 .keycap { font-size: .7rem; padding: .1rem .35rem; border: 1px solid hsl(var(--border)); border-radius: 4px; background: hsl(var(--muted)); }
+/* chân sidebar: nút Thống kê / Hướng dẫn / Tuỳ biến — tự xuống dòng, nút cuối chiếm cả hàng */
+.side-foot { padding: .5rem .55rem; border-top: 1px solid hsl(var(--border)); display: flex; flex-wrap: wrap; gap: .3rem; }
+.side-foot .btn { flex: 1 1 44%; min-width: 0; }
+.side-foot .btn:last-child { flex-basis: 100%; }
+/* hộp thoại Hướng dẫn */
+.helplist { display: flex; flex-direction: column; gap: .3rem; font-size: .78rem; line-height: 1.45; }
+.helpitem b { color: hsl(var(--foreground)); }
+.author { font-size: .85rem; display: flex; flex-wrap: wrap; gap: .2rem; margin: -.3rem 0 .2rem; }
 .cal-nav { height: 1.9rem; }
 .cal-title { min-width: 8.6rem; text-align: center; }
 .q.over { border-color: hsl(var(--ring)); border-style: dashed; }

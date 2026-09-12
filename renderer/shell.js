@@ -28,9 +28,10 @@ function sidebar() {
         setTimeout(() => i.focus(), 0);
         return i;
       })() : h('button', { class: 'nav', onclick: () => { ui.newList = true; render(); } }, h('span', { class: 'ic' }, '+'), h('span', null, 'Danh sách mới'))),
-    h('div', { style: { padding: '.5rem .55rem', borderTop: '1px solid hsl(var(--border))', display: 'flex', gap: '.3rem' } },
-      h('button', { class: 'btn ghost sm', style: { flex: 1 }, onclick: () => { ui.modal = 'stats'; render(); } }, '📊 Thống kê'),
-      h('button', { class: 'btn ghost sm', style: { flex: 1 }, onclick: () => { ui.modal = 'settings'; render(); } }, '⚙ Tuỳ biến')));
+    h('div', { class: 'side-foot' },
+      h('button', { class: 'btn ghost sm', onclick: () => { ui.modal = 'stats'; render(); } }, '📊 Thống kê'),
+      h('button', { class: 'btn ghost sm', id: 'helpBtn', title: 'Phím tắt + cách dùng + tác giả', onclick: () => { ui.modal = 'help'; render(); } }, '❔ Hướng dẫn'),
+      h('button', { class: 'btn ghost sm', onclick: () => { ui.modal = 'settings'; render(); } }, '⚙ Tuỳ biến')));
   return side;
 }
 
@@ -152,5 +153,6 @@ function render() {
   if (keepDetail) { const d = $('.detail-body'); if (d) d.scrollTop = keepDetail; }
   if (ui.modal === 'settings') app.append(settingsModal());
   if (ui.modal === 'stats') app.append(statsModal());
+  if (ui.modal === 'help') app.append(helpModal());
   if (ui.confirm) app.append(confirmModal());
 }

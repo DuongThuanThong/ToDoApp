@@ -164,6 +164,80 @@ function renderSettings() {
   const fresh = settingsModal();
   host.replaceWith(fresh);
 }
+/* ---------------- hộp thoại Hướng dẫn (phím tắt + cách dùng + tác giả) ---------------- */
+const AUTHOR = { name: 'Dương Thuận Thông', model: 'DeepSeek V4 Flash', agent: 'Hermes Agent' };
+// hiển thị tổ hợp trong app ('mod+n') kiểu bàn phím Windows
+const prettyKey = (c) => String(c || '').split('+').map((p) => ({ mod: 'Ctrl', alt: 'Alt', shift: 'Shift', meta: 'Win' }[p] || p.toUpperCase())).join(' + ');
+
+const TIPS = [
+  ['Gõ nhanh', 'Họp team #cv !cao 15h mai ~45p'],
+  ['#nhãn', '#cv → gắn nhãn cv'],
+  ['!ưu tiên', '!cao · !thấp · !tb (trung bình)'],
+  ['Giờ', '15h · 9h30 · 20:00'],
+  ['Ngày', 'mai · mốt · thứ 6 · 20/9 · 2026-09-20'],
+  ['Thời lượng', '~45p · ~1h30'],
+];
+const GUIDE = [
+  ['Bấm vào một dòng việc', 'mở bảng chi tiết để sửa tiêu đề, hạn, ưu tiên, nhãn, ghi chú, nhắc, lặp'],
+  ['Kéo thả dòng việc', 'đổi thứ tự trong danh sách; kéo vào cột Kanban → trạng thái, ô Ma trận → ưu tiên + hạn, ô Lịch → ngày đến hạn'],
+  ['Nút ☀ ở mỗi dòng', 'cho việc vào "Hôm nay của tôi"; bấm lần nữa để bỏ ra (danh sách này chỉ gồm việc bạn tự chọn)'],
+  ['Mũi tên ▾ cạnh việc cha', 'thu gọn / mở rộng việc con'],
+  ['Việc cha – con', 'việc con thừa hưởng hạn của cha; tự đặt hạn riêng thì sau đó cha đổi hạn cũng không ghi đè'],
+  ['Việc lặp lại', 'mở chi tiết → "Lặp lại" (mỗi ngày / tuần / tháng / năm). Tick xong thì lần kế tiếp tự sinh vào đúng ngày, không hiện lại ngay'],
+  ['Xoá việc', 'chuyển vào "Đã xoá" chứ không mất — khôi phục được bất cứ lúc nào, chỉ mất khi bạn bấm "Dọn sạch"'],
+  ['"Sắp tới" & "Đã hoàn thành"', 'gom thành thư mục theo từng ngày, bấm vào tên ngày để gập/mở'],
+  ['Cửa sổ mini', 'bấm tên cạnh logo để đổi danh sách đang xem; kéo mép cửa sổ để thu thành thanh mũi tên ở cạnh màn hình; rê chuột vào thanh đó để mở tạm'],
+];
+const PRIVACY = 'Dữ liệu nằm hoàn toàn trên máy bạn (todoapp.json trong thư mục dữ liệu của app), không gửi đi đâu cả. App tự lưu dự phòng .bak và tự phục hồi nếu file chính hỏng.';
+
+function helpModal() {
+  const s = db.settings;
+  const globalKeys = [
+    [prettyAccel(s.hotkeyLive), 'Mở / thu cửa sổ mini (dùng được cả khi không mở app)'],
+    [prettyAccel(s.quickAdd), 'Thêm việc nhanh'],
+  ].filter(([k]) => k);
+  const localKeys = [
+    ...KEY_ACTIONS.filter(([a]) => s.keys?.[a]).map(([a, label]) => [prettyKey(s.keys[a]), label]),
+    ['Esc', 'Đóng bảng đang mở · đang ở việc con thì quay về chi tiết việc cha'],
+    ['Enter', 'Lưu ô đang sửa · ở ô thêm việc là tạo việc mới'],
+  ];
+  const row = ([k, label]) => h('div', { class: 'keyrow' }, h('code', { class: 'keycap' }, k), h('span', { class: 'grow' }, label));
+  return h('div', { class: 'overlay' },   // chỉ đóng bằng nút Đóng / ✕ / Esc
+    h('div', { class: 'card modal', id: 'helpModal' },
+      h('div', { class: 'modal-head' }, h('h3', null, 'Hướng dẫn & phím tắt'), h('span', { class: 'grow' }),
+        h('button', { class: 'btn ghost icon sm', id: 'helpClose', title: 'Đóng (Esc)', onclick: () => { ui.modal = null; render(); } }, '✕')),
+      // Tác giả để NGAY ĐẦU hộp thoại: nằm cuối thì phải cuộn mới thấy
+      h('div', { class: 'author' },
+        h('span', null, 'Tác giả: ', h('b', null, AUTHOR.name)),
+        h('span', { class: 'muted' }, ' · model ', h('b', null, AUTHOR.model), ' + AI agent ', h('b', null, AUTHOR.agent))),
+      h('div', { class: 'sep' }),
+
+      h('div', { class: 'lbl' }, 'Phím tắt TRONG app (khi app đang mở)'),
+      h('div', { class: 'keylist' }, ...localKeys.map(row)),
+      h('div', { class: 'muted', style: { fontSize: '.72rem', margin: '.35rem 0 .2rem' } }, 'Đổi được ở ⚙ Tuỳ biến → "Phím tắt TRONG app".'),
+
+      h('div', { class: 'sep' }),
+      h('div', { class: 'lbl' }, 'Phím tắt TOÀN CỤC (dùng được cả khi đang làm việc khác)'),
+      h('div', { class: 'keylist' }, globalKeys.length ? globalKeys.map(row) : h('div', { class: 'muted', style: { fontSize: '.8rem' } }, 'Chưa đặt được phím nào — máy bạn đang bị app khác giữ hết tổ hợp.')),
+
+      h('div', { class: 'sep' }),
+      h('div', { class: 'lbl' }, 'Gõ nhanh khi thêm việc'),
+      h('div', { class: 'keylist' }, ...TIPS.map(row)),
+
+      h('div', { class: 'sep' }),
+      h('div', { class: 'lbl' }, 'Dùng trong 1 phút'),
+      h('div', { class: 'helplist' }, ...GUIDE.map(([t, d]) => h('div', { class: 'helpitem' },
+        h('b', null, t), h('span', { class: 'muted' }, ' — ' + d)))),
+
+      h('div', { class: 'sep' }),
+      h('div', { class: 'lbl' }, 'Dữ liệu của bạn'),
+      h('div', { class: 'muted', style: { fontSize: '.78rem' } }, PRIVACY),
+
+      h('div', { class: 'row2' },
+        h('button', { class: 'btn outline', onclick: () => { ui.modal = 'settings'; render(); } }, 'Tuỳ biến'),
+        h('button', { class: 'btn', onclick: () => { ui.modal = null; render(); } }, 'Đóng'))));
+}
+
 function statsModal() {
   const data = T.stats(db.tasks, 14);
   const max = Math.max(1, ...data.map((d) => d.done));
