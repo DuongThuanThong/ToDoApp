@@ -2,7 +2,8 @@
 /* Các chế độ xem: danh sách, kanban, lịch, timeline, ma trận Eisenhower. */
 /* ---------------- list view ---------------- */
 // Gom theo NGÀY -> mỗi ngày là 1 thư mục gập/mở được (log cho dễ nhìn, không phải 1 danh sách dài)
-function groupByDay(list, stampKey, renderRow) {
+// openFirst: mở sẵn thư mục đầu tiên (dùng cho "Sắp tới" — việc gần nhất phải thấy ngay)
+function groupByDay(list, stampKey, renderRow, openFirst = false) {
   const g = new Map();
   for (const t of list) {
     const k = t[stampKey] ? ymd(t[stampKey]) : '';
@@ -10,7 +11,7 @@ function groupByDay(list, stampKey, renderRow) {
     g.get(k).push(t);
   }
   const today = ymd(new Date());
-  return h('div', { class: 'groups' }, ...[...g].map(([k, items]) => h('details', { class: 'group', open: k === today },
+  return h('div', { class: 'groups' }, ...[...g].map(([k, items], i) => h('details', { class: 'group', open: k === today || (openFirst && i === 0) },
     h('summary', null, h('span', null, dayLabel(k)), h('span', { class: 'gct' }, items.length + ' việc')),
     h('div', { class: 'gbody' }, ...items.map(renderRow)))));
 }
@@ -46,6 +47,11 @@ function listView() {
   if (ui.view === 'completed') {
     if (!tasks.length) return h('div', { class: 'empty' }, 'Chưa hoàn thành việc nào.');
     return groupByDay(tasks, 'doneAt', (t) => row(t));
+  }
+  // "Sắp tới" cũng là log theo thời gian: gom theo ngày đến hạn, gần nhất trước, mở sẵn ngày gần nhất
+  if (ui.view === 'upcoming') {
+    if (!tasks.length) return h('div', { class: 'empty' }, 'Không có việc nào sắp tới. Việc mới có hạn sẽ hiện ở đây.');
+    return groupByDay([...tasks].sort((a, b) => new Date(a.due || 8.64e15) - new Date(b.due || 8.64e15)), 'due', (t) => row(t), true);
   }
   if (!tasks.length) return h('div', { class: 'empty' }, 'Chưa có việc nào. Gõ vào ô thêm việc ở trên — thử: Họp team #cv !cao 15h mai ~45p');
   const box = h('div');

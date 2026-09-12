@@ -110,7 +110,7 @@ function settingsModal() {
             ...[['left', 'Trái'], ['right', 'Phải'], ['top', 'Trên'], ['bottom', 'Dưới']].map(([v, n]) => h('option', { value: v, selected: s.edge === v }, n)))),
         h('div', { class: 'field' }, h('label', { class: 'lbl' }, 'Tự thu vào mép'),
           h('label', { style: { display: 'flex', gap: '.5rem', alignItems: 'center', fontSize: '.85rem' } },
-            h('input', { type: 'checkbox', checked: s.autoHide, onchange: (e) => set('autoHide', e.target.checked) }), 'Bật (bấm ra ngoài là ẩn)'))) ,
+            h('input', { type: 'checkbox', checked: s.autoHide, onchange: (e) => set('autoHide', e.target.checked) }), 'Bật (bấm ra ngoài là tự thu về mép)'))),
       num('opacity', 0.4, 1, 0.02, 'Độ trong suốt (mini)', ''),
       num('blur', 0, 30, 1, 'Blur kính (mini)', 'px'),
       num('tabSize', 4, 24, 1, 'Độ dày thanh mép', 'px'),
@@ -122,7 +122,10 @@ function settingsModal() {
         h('div', { class: 'field' }, h('label', { class: 'lbl' }, 'Rê chuột vào thanh mép'),
           h('label', { style: { display: 'flex', gap: '.5rem', alignItems: 'center', fontSize: '.85rem' } },
             h('input', { type: 'checkbox', checked: s.peek !== false, onchange: (e) => set('peek', e.target.checked) }), 'Mở tạm khi hover'))),
-      s.collapse === 'hidden' ? h('div', { class: 'muted', style: { fontSize: '.72rem', margin: '-.5rem 0 .7rem' } }, 'Đang ẩn hẳn — chỉ mở lại bằng phím tắt bên dưới hoặc menu tray.') : null,
+      h('div', { class: 'muted', style: { fontSize: '.72rem', margin: '-.5rem 0 .7rem' } },
+        s.collapse === 'hidden'
+          ? 'Ẩn hẳn: bấm ra ngoài hoặc dùng phím tắt là cửa sổ biến mất — chỉ mở lại bằng phím tắt hoặc menu tray.'
+          : 'Thanh mũi tên vẫn nằm ở cạnh màn hình khi bấm ra ngoài / dùng phím tắt. Bấm ✕ hoặc chuyển sang "Ẩn hẳn" mới mất hẳn.'),
       h('div', { class: 'sep' }),
       h('div', { class: 'row2' },
         h('div', { class: 'field' }, h('label', { class: 'lbl' }, 'Nhắc trước mặc định (phút)'),

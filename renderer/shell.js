@@ -4,7 +4,7 @@
 const NAV_HELP = {
   myday: 'Danh sách việc BẠN TỰ CHỌN cho hôm nay (bấm nút ☁ My Day ở mỗi việc để thêm vào)',
   today: 'Việc có HẠN rơi vào hôm nay (tự động theo ngày đến hạn)',
-  upcoming: 'Việc có hạn trong những ngày tới',
+  upcoming: 'Việc có hạn trong những ngày tới, gom theo từng ngày',
   nodate: 'Việc chưa đặt hạn',
   completed: 'Log việc đã xong, gom theo từng ngày',
   trash: 'Việc đã xoá — vẫn khôi phục được, chỉ mất khi bạn dọn sạch',
