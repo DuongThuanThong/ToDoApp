@@ -206,10 +206,11 @@ function helpModal() {
     h('div', { class: 'card modal', id: 'helpModal' },
       h('div', { class: 'modal-head' }, h('h3', null, 'Hướng dẫn & phím tắt'), h('span', { class: 'grow' }),
         h('button', { class: 'btn ghost icon sm', id: 'helpClose', title: 'Đóng (Esc)', onclick: () => { ui.modal = null; render(); } }, '✕')),
-      // Tác giả để NGAY ĐẦU hộp thoại: nằm cuối thì phải cuộn mới thấy
+      // Khung tác giả: tác giả · model · AI agent — 3 ô đều nhau, có viền bao quanh
       h('div', { class: 'author' },
-        h('span', null, 'Tác giả: ', h('b', null, AUTHOR.name)),
-        h('span', { class: 'muted' }, ' · model ', h('b', null, AUTHOR.model), ' + AI agent ', h('b', null, AUTHOR.agent))),
+        h('div', { class: 'a-item' }, h('span', { class: 'k' }, 'Tác giả'), h('b', null, AUTHOR.name)),
+        h('div', { class: 'a-item' }, h('span', { class: 'k' }, 'Model'), h('b', null, AUTHOR.model)),
+        h('div', { class: 'a-item agent' }, h('span', { class: 'k' }, 'AI agent'), h('b', null, AUTHOR.agent))),
       h('div', { class: 'sep' }),
 
       h('div', { class: 'lbl' }, 'Phím tắt TRONG app (khi app đang mở)'),
