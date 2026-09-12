@@ -1,0 +1,184 @@
+'use strict';
+/* Hộp thoại Tuỳ biến + Thống kê (theme, mini, ảnh nền, phím tắt trong app). */
+/* ---------------- modal: settings / stats ---------------- */
+const KEY_ACTIONS = [
+  ['newTask', 'Tạo việc mới (nhảy vào ô thêm việc)'],
+  ['closeDetail', 'Đóng bảng chi tiết'],
+  ['filter', 'Mở / đóng bảng lọc'],
+  ['search', 'Nhảy vào ô tìm kiếm'],
+  ['mini', 'Mở / ẩn cửa sổ mini'],
+  ['myDay', 'Mở "Hôm nay của tôi"'],
+];
+// phím tắt trong app: không chiếm phím của Windows, chỉ cần app đang focus
+function comboOf(ev) {
+  const m = [];
+  if (ev.ctrlKey || ev.metaKey) m.push('mod');
+  if (ev.altKey) m.push('alt');
+  if (ev.shiftKey) m.push('shift');
+  const k = String(ev.key || '').toLowerCase();
+  if (['control', 'alt', 'shift', 'meta', 'altgraph'].includes(k) || !k) return null;
+  m.push(k === ' ' ? 'space' : k);
+  return m.join('+');
+}
+function captureBind(action) {
+  const pick = (ev) => {
+    ev.preventDefault(); ev.stopPropagation();
+    if (ev.key === 'Escape') { document.removeEventListener('keydown', pick, true); return; }
+    const c = comboOf(ev);
+    if (!c || !(ev.ctrlKey || ev.metaKey || ev.altKey)) { toast('Thiếu phím bổ trợ', 'Cần Ctrl (hoặc Alt) cho phím tắt trong app — ví dụ Ctrl+W.'); return; }
+    document.removeEventListener('keydown', pick, true);
+    db.settings.keys[action] = c;
+    commit(); renderSettings();
+    toast('Đã gán phím', c);
+  };
+  document.addEventListener('keydown', pick, true);
+  toast('Bấm tổ hợp phím', 'Ví dụ Ctrl+W. Esc để huỷ.');
+}
+// hiển thị tổ hợp kiểu Windows cho dễ đọc: CommandOrControl+Shift+T -> Ctrl+Shift+T
+function prettyAccel(a) { return String(a || '').replace('CommandOrControl', 'Ctrl').replace('Super', 'Win'); }
+function captureHotkey() {
+  const KEY = { ' ': 'Space', ArrowUp: 'Up', ArrowDown: 'Down', ArrowLeft: 'Left', ArrowRight: 'Right', Escape: 'Esc', '+': 'Plus' };
+  const name = (k) => (k.length === 1 ? k.toUpperCase() : KEY[k] || k);
+  const pick = async (ev) => {
+    ev.preventDefault(); ev.stopPropagation();
+    if (ev.key === 'Escape') { document.removeEventListener('keydown', pick, true); return; }
+    if (['Control', 'Alt', 'Shift', 'Meta', 'AltGraph'].includes(ev.key)) return;
+    const mods = [];
+    if (ev.ctrlKey) mods.push('CommandOrControl');
+    if (ev.altKey) mods.push('Alt');
+    if (ev.shiftKey) mods.push('Shift');
+    if (ev.metaKey && !ev.ctrlKey) mods.push('Super');
+    if (!mods.length) { toast('Thiếu phím bổ trợ', 'Cần ít nhất Ctrl / Alt / Shift — ví dụ Ctrl+Alt+T.'); return; }
+    document.removeEventListener('keydown', pick, true);
+    const r = await API.hotkey([...mods, name(ev.key)].join('+'));
+    if (r.ok) { db.settings.hotkey = r.wanted; db.settings.hotkeyLive = r.live; }
+    commit();
+    render();
+    toast(r.ok ? (r.fellBack ? 'Phím bị app khác giữ' : 'Đã đặt phím tắt') : 'Không đặt được phím tắt',
+      r.ok ? (r.fellBack ? `Tạm dùng: ${prettyAccel(r.live)} — tổ hợp bạn chọn đang bị app khác chiếm` : `Đang dùng: ${prettyAccel(r.live)}`) : 'Mọi tổ hợp đều bị chiếm, giữ phím cũ.');
+  };
+  document.addEventListener('keydown', pick, true);
+  toast('Bấm tổ hợp phím', 'Ví dụ Ctrl+Alt+T. Esc để huỷ.');
+}
+function settingsModal() {
+  const s = db.settings;
+  const set = (k, v) => { s[k] = v; applyTheme(); commit(); render(); };
+  // slider: cập nhật nhãn tại chỗ, KHÔNG render lại (render lại sẽ giật và mất focus khi đang kéo)
+  const num = (k, min, max, step, label, suffix = '') => {
+    const lbl = h('label', { class: 'lbl' }, `${label}: ${s[k]}${suffix}`);
+    return h('div', { class: 'field' }, lbl,
+      h('input', {
+        type: 'range', min, max, step, value: s[k], style: { width: '100%' },
+        oninput: (e) => { s[k] = +e.target.value; lbl.textContent = `${label}: ${s[k]}${suffix}`; applyTheme(); },
+        onchange: () => commit(),
+      }));
+  };
+  const numFont = (() => {
+    const lbl = h('label', { class: 'lbl' }, 'Cỡ chữ: ' + s.fontSize + 'px');
+    return h('div', { class: 'field' }, lbl,
+      h('input', { type: 'range', min: 12, max: 20, value: s.fontSize, style: { width: '100%' }, oninput: (e) => { s.fontSize = +e.target.value; lbl.textContent = 'Cỡ chữ: ' + s.fontSize + 'px'; applyTheme(); }, onchange: () => commit() }));
+  })();
+  return h('div', { class: 'overlay' },   // KHÔNG đóng khi bấm ra ngoài: chỉ nút Đóng / ✕ / Esc
+    h('div', { class: 'card modal', id: 'settingsModal' },
+      h('div', { class: 'modal-head' },
+        h('h3', null, 'Tuỳ biến'),
+        h('span', { class: 'grow' }),
+        h('button', { class: 'btn ghost icon sm', id: 'settingsClose', title: 'Đóng (Esc)', onclick: () => { ui.modal = null; render(); } }, '✕')),
+      h('div', { class: 'row2' },
+        h('div', { class: 'field' }, h('label', { class: 'lbl' }, 'Chế độ'),
+          h('div', { class: 'tabs', style: { width: '100%' } },
+            ...['dark', 'light'].map((v) => h('button', { class: (s.theme === v ? 'on' : ''), style: { flex: 1 }, onclick: () => set('theme', v) }, v === 'dark' ? 'Tối' : 'Sáng')))),
+        h('div', { class: 'field' }, h('label', { class: 'lbl' }, 'Màu chủ đạo'),
+          h('input', { type: 'color', class: 'input', value: s.accent, style: { padding: '2px' }, oninput: (e) => { s.accent = e.target.value; applyTheme(); }, onchange: () => commit() }))),
+      num('radius', 0, 24, 1, 'Bo góc', 'px'),
+      h('div', { class: 'row2' },
+        h('div', { class: 'field' }, h('label', { class: 'lbl' }, 'Font'),
+          h('select', { class: 'input', onchange: (e) => set('font', e.target.value) },
+            ...['Segoe UI', 'Inter', 'Arial', 'Times New Roman', 'Consolas', 'JetBrains Mono'].map((f) => h('option', { value: f, selected: s.font === f }, f)))),
+        numFont),
+      h('div', { class: 'field' }, h('label', { class: 'lbl' }, 'Ảnh nền cửa sổ chính'),
+        h('div', { class: 'row2' },
+          h('input', { class: 'input', value: s.bg || '', placeholder: 'Chưa chọn ảnh', onchange: (e) => set('bg', e.target.value) }),
+          h('button', { class: 'btn outline', onclick: async () => { const p = await API.pickImage(); if (p) set('bg', p); } }, 'Chọn…'))),
+      s.bg ? h('div', null,
+        num('bgOpacity', 0.05, 1, 0.05, 'Độ hiện của ảnh nền (cửa sổ chính)', ''),
+        num('bgBlur', 0, 30, 1, 'Làm mờ ảnh nền (blur)', 'px')) : null,
+      h('div', { class: 'sep' }),
+      h('div', { class: 'row2' },
+        h('div', { class: 'field' }, h('label', { class: 'lbl' }, 'Neo cửa sổ mini'),
+          h('select', { class: 'input', onchange: (e) => { s.edge = e.target.value; commit(); API.mini.reset(); } },
+            ...[['left', 'Trái'], ['right', 'Phải'], ['top', 'Trên'], ['bottom', 'Dưới']].map(([v, n]) => h('option', { value: v, selected: s.edge === v }, n)))),
+        h('div', { class: 'field' }, h('label', { class: 'lbl' }, 'Tự thu vào mép'),
+          h('label', { style: { display: 'flex', gap: '.5rem', alignItems: 'center', fontSize: '.85rem' } },
+            h('input', { type: 'checkbox', checked: s.autoHide, onchange: (e) => set('autoHide', e.target.checked) }), 'Bật (bấm ra ngoài là ẩn)'))) ,
+      num('opacity', 0.4, 1, 0.02, 'Độ trong suốt (mini)', ''),
+      num('blur', 0, 30, 1, 'Blur kính (mini)', 'px'),
+      num('tabSize', 4, 24, 1, 'Độ dày thanh mép', 'px'),
+      h('div', { class: 'row2' },
+        h('div', { class: 'field' }, h('label', { class: 'lbl' }, 'Khi thu vào'),
+          h('div', { class: 'tabs', style: { width: '100%' } },
+            ...[['tab', 'Thanh mũi tên'], ['hidden', 'Ẩn hẳn']].map(([v, n]) =>
+              h('button', { class: (s.collapse === v ? 'on' : ''), style: { flex: 1 }, onclick: () => set('collapse', v) }, n)))),
+        h('div', { class: 'field' }, h('label', { class: 'lbl' }, 'Rê chuột vào thanh mép'),
+          h('label', { style: { display: 'flex', gap: '.5rem', alignItems: 'center', fontSize: '.85rem' } },
+            h('input', { type: 'checkbox', checked: s.peek !== false, onchange: (e) => set('peek', e.target.checked) }), 'Mở tạm khi hover'))),
+      s.collapse === 'hidden' ? h('div', { class: 'muted', style: { fontSize: '.72rem', margin: '-.5rem 0 .7rem' } }, 'Đang ẩn hẳn — chỉ mở lại bằng phím tắt bên dưới hoặc menu tray.') : null,
+      h('div', { class: 'sep' }),
+      h('div', { class: 'row2' },
+        h('div', { class: 'field' }, h('label', { class: 'lbl' }, 'Nhắc trước mặc định (phút)'),
+          h('input', { class: 'input', type: 'number', value: s.reminderOffset, onchange: (e) => set('reminderOffset', +e.target.value) }),
+          h('button', { class: 'btn outline sm', style: { marginTop: '.35rem' }, onclick: async () => { await API.testAlert(); toast('Đã bắn thông báo thử', 'Kiểm tra góc phải màn hình + nghe tiếng chuông', [], 5000); } }, '🔔 Thử thông báo')),
+        h('div', { class: 'field' }, h('label', { class: 'lbl' }, 'Khởi động cùng máy'),
+          h('label', { style: { display: 'flex', gap: '.5rem', alignItems: 'center', fontSize: '.85rem' } },
+            h('input', { type: 'checkbox', checked: s.autostart, onchange: async (e) => { s.autostart = e.target.checked; commit(); await API.autostart(e.target.checked); } }), 'Bật'))),
+      h('div', { class: 'field' }, h('label', { class: 'lbl' }, 'Phím tắt mở/ẩn mini (TOÀN CỤC — dùng được cả khi không focus app)'),
+        h('div', { style: { display: 'flex', gap: '.4rem' } },
+          h('input', { class: 'input', value: s.hotkey || '', readonly: true }),
+          h('button', { class: 'btn outline', onclick: captureHotkey }, 'Đặt phím…')),
+        // nói thẳng phím NÀO đang chạy: người dùng chọn 1 đằng, app chạy 1 nẻo là lỗi cũ
+        s.hotkeyLive ? h('div', { class: 'muted', style: { fontSize: '.72rem', marginTop: '.3rem' } },
+          s.hotkeyLive === s.hotkey ? 'Đang chạy: ' + prettyAccel(s.hotkeyLive) : '⚠ Tổ hợp này bị app khác giữ — tạm dùng: ' + prettyAccel(s.hotkeyLive)) : null),
+      h('div', { class: 'muted', style: { fontSize: '.72rem', margin: '-.5rem 0 .7rem' } }, 'Nếu tổ hợp bị app khác (IME, PowerToys…) chiếm, app dùng tạm tổ hợp dự phòng và ghi rõ ở trên. Đóng hết app khác đang giữ phím rồi đặt lại để dùng đúng ý bạn.'),
+      h('div', { class: 'sep' }),
+      h('div', { class: 'field' }, h('label', { class: 'lbl' }, 'Phím tắt TRONG app (chỉ khi app đang focus)'),
+        h('div', { class: 'keylist' }, ...KEY_ACTIONS.map(([act, label]) => h('div', { class: 'keyrow' },
+          h('span', { class: 'grow' }, label),
+          h('code', { class: 'keycap' }, (s.keys?.[act] || '').replace('mod', 'Ctrl').replace('alt', 'Alt').replace('shift', 'Shift')),
+          h('button', { class: 'btn outline sm', onclick: () => captureBind(act) }, 'Đổi'),
+          h('button', { class: 'btn ghost sm', title: 'Bỏ phím này', onclick: () => { delete s.keys[act]; commit(); renderSettings(); } }, '✕'))))),
+      h('div', { class: 'field' },
+        h('label', { style: { display: 'flex', gap: '.5rem', alignItems: 'center', fontSize: '.85rem' } },
+          h('input', { type: 'checkbox', checked: s.openOnAdd !== false, onchange: (e) => set('openOnAdd', e.target.checked) }),
+          'Thêm việc xong là mở luôn bảng chi tiết (để tuỳ biến ngay)')),
+      h('div', { class: 'sep' }),
+      h('div', { class: 'row2' },
+        h('button', { class: 'btn outline', onclick: () => { ui.modal = 'stats'; render(); } }, 'Thống kê'),
+        h('button', { class: 'btn', id: 'settingsDone', onclick: () => { ui.modal = null; render(); } }, 'Đóng'))));
+}
+function renderSettings() {
+  const host = $('#settingsModal');
+  if (!host) return;
+  const fresh = settingsModal();
+  host.replaceWith(fresh);
+}
+function statsModal() {
+  const data = T.stats(db.tasks, 14);
+  const max = Math.max(1, ...data.map((d) => d.done));
+  const total = data.reduce((s, d) => s + d.done, 0);
+  return h('div', { class: 'overlay' },
+    h('div', { class: 'card modal' },
+      h('div', { class: 'modal-head' }, h('h3', null, 'Năng suất 14 ngày'), h('span', { class: 'grow' }),
+        h('button', { class: 'btn ghost icon sm', title: 'Đóng', onclick: () => { ui.modal = null; render(); } }, '✕')),
+      h('div', { class: 'chart' }, ...data.map((d) => h('div', { style: { height: (d.done / max * 100) + '%' }, dataset: { n: `${d.day}: ${d.done}` }, title: d.day + ': ' + d.done }))),
+      h('div', { class: 'muted', style: { display: 'flex', justifyContent: 'space-between', fontSize: '.72rem', marginTop: '.3rem' } },
+        h('span', null, data[0]?.day), h('span', null, `${total} việc xong`), h('span', null, data[data.length - 1]?.day)),
+      h('div', { class: 'sep' }),
+      h('div', { style: { display: 'flex', gap: '1rem', fontSize: '.85rem' } },
+        h('span', null, 'Đang mở: ', h('strong', null, db.tasks.filter((t) => !t.done).length)),
+        h('span', null, 'Xong hôm nay: ', h('strong', null, db.tasks.filter((t) => t.done && t.doneAt && ymd(t.doneAt) === ymd(new Date())).length)),
+        h('span', null, 'Trễ hạn: ', h('strong', null, db.tasks.filter((t) => T.overdue(t)).length))),
+      h('div', { class: 'sep' }),
+      h('div', { class: 'row2' },
+        h('button', { class: 'btn outline', onclick: () => { ui.modal = 'settings'; render(); } }, 'Tuỳ biến'),
+        h('button', { class: 'btn', onclick: () => { ui.modal = null; render(); } }, 'Đóng'))));
+}

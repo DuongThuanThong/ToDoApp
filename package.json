@@ -1,0 +1,15 @@
+{
+  "name": "todoapp",
+  "version": "0.1.0",
+  "description": "ToDoApp - quan ly cong viec desktop (TickTick/Things-inspired), chay nen + mini window neo canh man hinh",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node lib/tasks.test.js",
+    "smoke": "electron . --smoke",
+    "shortcut": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/make-shortcut.ps1"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0"
+  }
+}

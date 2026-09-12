@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data: file: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+  <title>ToDoApp</title>
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body>
+  <div id="app"></div>
+  <div id="toasts"></div>
+  <!-- Nạp theo thứ tự: lõi (state + helper) trước, boot sau cùng.
+       Script thường dùng chung phạm vi global nên không cần bundler. -->
+  <script src="core.js"></script>
+  <script src="actions.js"></script>
+  <script src="row.js"></script>
+  <script src="views.js"></script>
+  <script src="filterpanel.js"></script>
+  <script src="detail.js"></script>
+  <script src="settings.js"></script>
+  <script src="shell.js"></script>
+  <script src="mini.js"></script>
+  <script src="boot.js"></script>
+</body>
+</html>
