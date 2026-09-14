@@ -182,7 +182,7 @@ function dueMatch(t) {
     case 'year': return !!t.due && ymd(t.due).slice(0, 4) === today.slice(0, 4);
     case 'weekend': return !!t.due && [0, 6].includes(new Date(t.due).getDay());
     case 'nodate': return !t.due;
-    case 'myday': return t.myDay === today;
+    case 'myday': return T.inMyDay(t);   // cùng luật với view "Hôm nay của tôi" (hạn hôm nay + trễ + tự chọn)
     case 'late': return !!t.due && !t.done && new Date(t.due) < new Date();
     default: return true;
   }

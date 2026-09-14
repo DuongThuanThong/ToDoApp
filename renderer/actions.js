@@ -87,9 +87,12 @@ function reorder(fromId, toId, after = false) {
   commit(); render();
 }
 function toggleMyDay(t) {
-  const on = t.myDay === ymd(new Date());
-  patch(t, { myDay: on ? null : ymd(new Date()) });
-  toast(on ? 'Đã bỏ khỏi "Hôm nay của tôi"' : 'Đã thêm vào "Hôm nay của tôi"', t.title, [], 3000);
+  const on = T.inMyDay(t);
+  const today = ymd(new Date());
+  // Bỏ ra khỏi việc đang ĐẾN HẠN hôm nay: ghi myDaySkip để nó không tự mọc lại ngay (mai hết skip).
+  patch(t, on ? { myDay: null, myDaySkip: today } : { myDay: today, myDaySkip: null });
+  toast(on ? 'Đã bỏ khỏi "Hôm nay của tôi"' : 'Đã thêm vào "Hôm nay của tôi"',
+    on && t.due ? 'Việc có hạn nên mai sẽ tự hiện lại' : '', [], 3000);
 }
 // thu gọn / mở rộng việc con của một việc cha (kiểu mở list). Trạng thái chỉ trong phiên, không lưu DB.
 function foldKids(id) { ui.fold[id] = !ui.fold[id]; render(); }

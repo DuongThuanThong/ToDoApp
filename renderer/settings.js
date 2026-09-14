@@ -180,7 +180,7 @@ const TIPS = [
 const GUIDE = [
   ['Bấm vào một dòng việc', 'mở bảng chi tiết để sửa tiêu đề, hạn, ưu tiên, nhãn, ghi chú, nhắc, lặp'],
   ['Kéo thả dòng việc', 'đổi thứ tự trong danh sách; kéo vào cột Kanban → trạng thái, ô Ma trận → ưu tiên + hạn, ô Lịch → ngày đến hạn'],
-  ['Nút ☀ ở mỗi dòng', 'cho việc vào "Hôm nay của tôi"; bấm lần nữa để bỏ ra (danh sách này chỉ gồm việc bạn tự chọn)'],
+  ['Nút ☀ ở mỗi dòng', 'cho việc vào "Hôm nay của tôi"; bấm lần nữa để bỏ ra (việc có hạn hôm nay / đã trễ tự nằm sẵn trong đó, bỏ ra thì mai lại hiện)'],
   ['Mũi tên ▾ cạnh việc cha', 'thu gọn / mở rộng việc con'],
   ['Việc cha – con', 'việc con thừa hưởng hạn của cha; tự đặt hạn riêng thì sau đó cha đổi hạn cũng không ghi đè'],
   ['Việc lặp lại', 'mở chi tiết → "Lặp lại" (mỗi ngày / tuần / tháng / năm). Tick xong thì lần kế tiếp tự sinh vào đúng ngày, không hiện lại ngay'],

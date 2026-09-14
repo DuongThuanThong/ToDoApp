@@ -2,7 +2,7 @@
 /* Khung app: sidebar, topbar, thanh thêm việc, bảng lọc, bảng xác nhận xoá, hàm render tổng. */
 /* ---------------- sidebar ---------------- */
 const NAV_HELP = {
-  myday: 'Danh sách việc BẠN TỰ CHỌN cho hôm nay (bấm nút ☁ My Day ở mỗi việc để thêm vào, ☀ để bỏ ra)',
+  myday: 'Việc đến hạn hôm nay + việc đã trễ + việc bạn TỰ CHỌN (bấm ☁ ở mỗi việc để thêm vào, ☀ để bỏ ra)',
   today: 'Việc có HẠN hôm nay, kể cả việc đã trễ hạn (tự động theo ngày đến hạn)',
   upcoming: 'Việc có hạn trong những ngày tới, gom theo từng ngày',
   nodate: 'Việc chưa đặt ngày đến hạn',

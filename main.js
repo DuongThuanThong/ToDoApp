@@ -36,6 +36,8 @@ if (!app.requestSingleInstanceLock()) {
     Menu.setApplicationMenu(null);  // bỏ menu mặc định: trả Ctrl+W / Ctrl+N về cho app
     S.save(false);                  // ghi file ngay khi mở -> biết chắc dữ liệu nằm ở đâu
     W.createMain();
+    // Cửa sổ mini: tự bật lại nếu lúc trước nó đang bật (trước đây khởi động máy xong phải bấm tay).
+    if (S.get().settings.miniOn) W.showMini();
     W.createTray();
     IPC.register();
     const hk = H.registerAll();

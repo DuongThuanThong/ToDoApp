@@ -96,12 +96,12 @@ function row(t, { sub = false, last = false, fold = 0 } = {}) {
     t.createdAt ? h('span', { class: 'row-time', title: 'Tạo lúc ' + new Date(t.createdAt).toLocaleString('vi-VN') }, fmtStamp(t.createdAt)) : null,
     h('div', { class: 'row-side' },
       h('button', {
-        class: 'btn ghost myday-btn' + (t.myDay ? ' on' : ''),
-        title: t.myDay
+        class: 'btn ghost myday-btn' + (T.inMyDay(t) ? ' on' : ''),
+        title: T.inMyDay(t)
           ? 'Việc này đang nằm trong "Hôm nay của tôi" — bấm để bỏ ra'
-          : 'Cho việc này vào "Hôm nay của tôi" (danh sách bạn TỰ CHỌN làm hôm nay, khác "Hôm nay" là việc có hạn rơi vào hôm nay)',
+          : 'Cho việc này vào "Hôm nay của tôi" (việc tự chọn làm hôm nay; việc có hạn hôm nay tự nằm sẵn trong đó)',
         onclick: (e) => { e.stopPropagation(); toggleMyDay(t); },
-      }, t.myDay ? '☀' : '☁'),
+      }, T.inMyDay(t) ? '☀' : '☁'),
       h('button', { class: 'btn ghost icon sm', title: 'Xoá việc (có hỏi lại)', onclick: (e) => { e.stopPropagation(); delTask(t); } }, '✕')));
   if (!sub) makeDraggable(r, t.id);   // việc con không kéo riêng: nó đi theo cha
   return r;
