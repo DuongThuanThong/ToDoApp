@@ -6,7 +6,8 @@ const NAV_HELP = {
   today: 'Việc có HẠN đúng hôm nay, cộng việc LẶP có lịch rơi vào hôm nay (việc quá hạn nằm ở "Trễ hẹn")',
   late: 'Việc đã quá hạn chót, gom theo TỪNG NGÀY đến hạn — thư mục ghi rõ trễ bao nhiêu ngày',
   upcoming: 'Việc có hạn trong những ngày tới, gom theo từng ngày',
-  nodate: 'Việc chưa đặt ngày đến hạn',
+  nodate: 'Việc MỘT LẦN chưa đặt ngày đến hạn (việc hằng ngày/tuần nằm ở "Định kì")',
+  recur: 'KHO các việc ĐỊNH KÌ — mỗi việc lặp nằm đúng 1 dòng. Bấm vào dòng để sửa lại lịch (kiểu lặp, thứ/ngày, giờ) bất cứ lúc nào. Việc ở đây KHÔNG tick xong tại đây: cứ để nó tự rơi vào "Hôm nay" đúng ngày rồi tick ở đó — app tự sinh kỳ kế tiếp',
   completed: 'Log việc đã xong, gom theo từng ngày',
   trash: 'Việc đã xoá — vẫn khôi phục được, chỉ mất khi bạn dọn sạch',
 };

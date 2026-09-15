@@ -74,6 +74,12 @@ function listView() {
     return groupBy(tasks, (t) => T.myDaySection(t), (k) => MYDAY_LABEL[k] || k, rowFull,
       { openFirst: 'all', order: T.MYDAY_SECTIONS });
   }
+  // "Định kì" = kho quản lý việc lặp: gom theo LỊCH (hằng ngày / hằng tuần T2 T4 …) để nhìn 1 lượt
+  // là biết mình đang có những chuỗi lặp nào, và lôi ra sửa lịch cho nhanh.
+  if (ui.view === 'recur') {
+    if (!tasks.length) return h('div', { class: 'empty' }, 'Chưa có việc định kì nào. Mở một việc → "Lặp lại" để biến nó thành việc hằng ngày / hằng tuần / hằng tháng.');
+    return groupBy(tasks, (t) => repeatText(t.repeat), (k) => '↻ ' + k, rowFull, { openFirst: 'all' });
+  }
   if (!tasks.length) return h('div', { class: 'empty' }, 'Chưa có việc nào. Gõ vào ô thêm việc ở trên — thử: Họp team #cv !cao 15h mai ~45p');
   return h('div', null, ...tasks.map(rowFull).flat());
 }

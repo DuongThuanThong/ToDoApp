@@ -111,7 +111,8 @@ Thêm xong app mở luôn bảng chi tiết và đặt con trỏ vào ô tiêu �
 | **Hôm nay** | Việc có hạn **đúng hôm nay**, cộng việc **lặp không hạn** có lịch rơi vào hôm nay (kỳ lặp **có** hạn riêng thì nằm ở đúng ngày của nó, không hiện sớm) |
 | **Trễ hẹn** | Việc **đã quá hạn**, gom theo **từng ngày đến hạn** — thư mục ghi rõ **trễ bao nhiêu ngày** |
 | **Sắp tới** | Việc có hạn trong những ngày tới, gom thành thư mục theo từng ngày |
-| **Chưa có hạn** | Việc chưa đặt ngày đến hạn |
+| **Chưa có hạn** | Việc **một lần** chưa đặt ngày đến hạn (việc hằng ngày/tuần nằm ở **Định kì**) |
+| **Định kì** | **Kho quản lý việc lặp** — mỗi việc lặp đúng 1 dòng, gom nhóm theo lịch (hằng ngày · hằng tuần T2 T4…). Bấm vào dòng để **sửa lại thứ/ngày/giờ** bất cứ lúc nào. Không tick ở đây: cứ để việc tự rơi vào **Hôm nay** đúng ngày rồi tick, app tự sinh kỳ kế tiếp |
 | **Đã hoàn thành** | Log việc đã xong, gom theo ngày hoàn thành |
 | **Đã xoá** | Thùng rác — khôi phục được, chỉ mất khi bạn bấm "Dọn sạch" |
 | **Inbox / danh sách riêng** | Tự tạo bao nhiêu danh sách cũng được (nút "Danh sách mới"). Bấm **✎** cạnh tên danh sách để **đổi tên ngay tại chỗ** (Enter = lưu, Esc = bỏ), **✕** để xoá |
@@ -148,6 +149,8 @@ Mở chi tiết → **Lặp lại** → chọn *Mỗi ngày / tuần / tháng / 
 - **Hằng tuần theo thứ**: chọn *Hằng tuần* rồi bấm các thứ — ví dụ **T2 T4** cho lịch Reading, thêm **Giờ của lần lặp** = `07:00` là mỗi lần rơi đúng 7h sáng.
 - **Hằng tháng theo ngày**: chọn *Hằng tháng* rồi gõ ngày — ví dụ `15, cuối`. Chữ **cuối** tự hiểu ngày cuối tháng (tháng 2 là 28, tháng 4 là 30…), **đầu** là ngày 1. Ngày 31 gặp tháng ít ngày hơn sẽ lấy ngày cuối tháng đó.
 - **Mỗi N …**: ô "Mỗi (tuần)" = 2 nghĩa là cách 2 tuần một lần.
+
+**Không cần tự sinh việc lặp bằng tay**: mở khung **Định kì** (↻ ở sidebar) là thấy toàn bộ việc lặp đang chạy, mỗi việc đúng 1 dòng. Bấm vào dòng đó để **đổi lịch** (kiểu lặp, thứ trong tuần, ngày trong tháng, giờ) — lần lặp sau sẽ theo lịch mới. Khung này **không tick xong tại chỗ**: bạn cứ để việc tự nó rơi vào **Hôm nay** đúng ngày rồi tick ở đó, app tự sinh kỳ kế tiếp và ghi lại kỳ cũ vào "Đã hoàn thành".
 
 Tick xong một việc lặp, app tự sinh lần kế tiếp vào **đúng ngày đến hạn mới** — lần mới không thừa hưởng trạng thái của lần vừa xong, nên không hiện lại ngay trong "Hôm nay của tôi". Mỗi kỳ **đã có hạn riêng** thì nằm ở **đúng ngày của nó** (kỳ của mai/17-9 không chen vào "Hôm nay" hôm nay); chỉ việc lặp **không có hạn** mới để **lịch lặp** quyết định ngày. **Bỏ tick** thì app **thu hồi luôn kỳ vừa sinh** (tick lại vẫn chỉ 1 kỳ, không nhân bản).
 

@@ -34,6 +34,7 @@ const VIEWS = [
   ['late', '⏰', 'Trễ hẹn'],
   ['upcoming', '▤', 'Sắp tới'],
   ['nodate', '▢', 'Chưa có hạn'],
+  ['recur', '↻', 'Định kì'],
   ['completed', '✓', 'Đã hoàn thành'],
   ['trash', '🗑', 'Đã xoá'],
 ];

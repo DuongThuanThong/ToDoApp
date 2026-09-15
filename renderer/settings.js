@@ -193,9 +193,11 @@ const GUIDE = [
   ['Mũi tên ▾ cạnh việc cha', 'thu gọn / mở rộng việc con'],
   ['Việc cha – con', 'việc con thừa hưởng hạn của cha; tự đặt hạn riêng thì sau đó cha đổi hạn cũng không ghi đè'],
   ['Việc lặp lại', 'mở chi tiết → "Lặp lại" (mỗi ngày / tuần / tháng / năm). Hằng tuần thì bấm các THỨ (T2 T4…), hằng tháng thì gõ NGÀY ("15, cuối" — cuối tự biết 28/29/30/31), kèm GIỜ riêng cho mỗi kỳ. Tick xong thì lần kế tiếp tự sinh vào đúng ngày, không hiện lại ngay — và mỗi kỳ nằm ở ĐÚNG NGÀY của nó (kỳ của mai không chen vào "Hôm nay"). Bỏ tick thì thu hồi luôn kỳ vừa sinh, không để lại bản thừa'],
+  ['Khung "Định kì" (↻)', 'KHO quản lý mọi việc lặp — mỗi việc đúng 1 dòng, gom nhóm theo lịch (hằng ngày / hằng tuần T2 T4…). Bấm vào dòng để sửa lại lịch bất cứ lúc nào. Ở khung này KHÔNG có nút tick: cứ để việc tự rơi vào "Hôm nay" đúng ngày rồi tick ở đó, app tự sinh kỳ kế tiếp'],
   ['Xoá việc', 'chuyển vào "Đã xoá" chứ không mất — khôi phục được bất cứ lúc nào; việc nằm trong đó quá 30 ngày sẽ bị dọn hẳn'],
   ['Đổi tên danh sách', 'rê chuột vào dòng danh sách ở sidebar → bấm ✎ để sửa tên ngay tại chỗ (Enter = lưu, Esc = bỏ); ✕ là xoá danh sách'],
   ['"Sắp tới" & "Đã hoàn thành"', 'gom thành thư mục theo từng ngày, bấm vào tên ngày để gập/mở'],
+  ['"Định kì"', 'kho các việc LẶP: mỗi việc 1 dòng, gom theo lịch. Bấm vào dòng để đổi thứ/ngày/giờ. Không tick ở đây — việc tự rơi vào "Hôm nay" đúng ngày để tick'],
   ['Cửa sổ mini', 'bấm tên cạnh logo để đổi danh sách đang xem; kéo mép cửa sổ để thu thành thanh mũi tên ở cạnh màn hình; rê chuột vào thanh đó để mở tạm'],
 ];
 const PRIVACY = 'Dữ liệu nằm hoàn toàn trên máy bạn (todoapp.json trong thư mục dữ liệu của app), không gửi đi đâu cả. App tự lưu dự phòng .bak và tự phục hồi nếu file chính hỏng.';

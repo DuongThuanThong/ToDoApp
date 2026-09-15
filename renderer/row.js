@@ -80,7 +80,11 @@ function row(t, { sub = false, last = false, fold = 0 } = {}) {
       onclick: (e) => { e.stopPropagation(); if (fold) foldKids(t.id); },
     }, fold ? (shut ? '▸' : '▾') : '') : null,
     h('div', { class: 'pdot p' + (t.priority || 0), title: 'Ưu tiên: ' + PRIO[t.priority || 0] }),
-    h('button', { class: 'cb' + (t.done ? ' on' : ''), title: 'Hoàn thành', onclick: (e) => { e.stopPropagation(); toggleTask(t); askParent(t); } }, '✓'),
+    // Khung "Định kì" là KHO quản lý: không tick xong ở đây (việc lặp phải chín theo ngày của nó).
+    // Vẫn giữ 1 ô trống cùng kích thước để các dòng thẳng hàng với các khung khác.
+    ui.view === 'recur'
+      ? h('span', { class: 'cb recur-slot', title: 'Việc định kì — bấm vào dòng để xem/sửa lịch. Tick xong ở "Hôm nay" khi tới ngày' })
+      : h('button', { class: 'cb' + (t.done ? ' on' : ''), title: 'Hoàn thành', onclick: (e) => { e.stopPropagation(); toggleTask(t); askParent(t); } }, '✓'),
     h('div', { class: 'row-main', title: 'Bấm để mở chi tiết', onclick: () => { if (Date.now() - dragEnd < 350) return; ui.openId = t.id; render(); } },
       h('div', { class: 'row-title' }, t.title || '(không tiêu đề)'),
       h('div', { class: 'row-meta' },

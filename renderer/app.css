@@ -202,6 +202,9 @@ select.input option { background: hsl(var(--card)); color: hsl(var(--card-foregr
 }
 .cb:hover { border-color: hsl(var(--ring)); }
 .cb.on { background: hsl(var(--primary)); border-color: hsl(var(--primary)); color: hsl(var(--primary-foreground)); }
+/* Khung "Định kì" không tick xong tại chỗ: ô này chỉ giữ chỗ cho thẳng hàng, vẽ nét đứt cho biết
+   là chỗ trống chứ không phải nút bị vô hiệu. */
+.cb.recur-slot { border-style: dashed; border-color: hsl(var(--muted-foreground) / .45); cursor: default; }
 .pdot { width: .5rem; height: .5rem; border-radius: 99px; flex: none; margin-top: .45rem; }
 .pdot.p0 { background: hsl(var(--p0)); } .pdot.p1 { background: hsl(var(--p1)); }
 .pdot.p2 { background: hsl(var(--p2)); } .pdot.p3 { background: hsl(var(--p3)); }
