@@ -31,5 +31,6 @@ contextBridge.exposeInMainWorld('api', {
   addTask: (task) => ipcRenderer.invoke('task:add', task),
   testAlert: () => ipcRenderer.invoke('app:testAlert'),
   isMini: new URLSearchParams(location.search).get('mini') === '1',
+  version: require('./package.json').version,   // MỘT nguồn duy nhất: package.json (hiện ở hộp Hướng dẫn)
   T: { parseSmart, view, inMyDay, plannedToday, myDaySection, MYDAY_SECTIONS, autoSchedule, stats, toggleDone, subtaskProgress, overdue, setDue, inheritDue },
 });

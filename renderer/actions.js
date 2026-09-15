@@ -88,12 +88,18 @@ function reorder(fromId, toId, after = false) {
   commit(); render();
 }
 function toggleMyDay(t) {
-  const on = T.inMyDay(t);
+  // Việc nằm trong KẾ HOẠCH HÔM NAY (đến hạn hôm nay / lặp rơi vào hôm nay) thì LUÔN nằm trong
+  // "Hôm nay của tôi" — không bỏ ra được, bấm nút chỉ để biết lý do (luật người dùng chốt).
+  if (T.plannedToday(t)) {
+    toast('Việc này luôn nằm trong "Hôm nay của tôi"', 'vì nó đến hạn (hoặc lặp) đúng hôm nay', [], 3000);
+    return;
+  }
   const today = ymd(new Date());
-  // Bỏ ra khỏi việc đang ĐẾN HẠN hôm nay: ghi myDaySkip để nó không tự mọc lại ngay (mai hết skip).
+  const on = T.inMyDay(t);   // dùng CHUNG hàm với nút ☀/☁ -> nút và hành động không bao giờ lệch nhau
+  // Bỏ ra khỏi việc đang TRỄ: ghi myDaySkip để mai nó tự hiện lại (không xoá hạn của việc).
   patch(t, on ? { myDay: null, myDaySkip: today } : { myDay: today, myDaySkip: null });
   toast(on ? 'Đã bỏ khỏi "Hôm nay của tôi"' : 'Đã thêm vào "Hôm nay của tôi"',
-    on && t.due ? 'Việc có hạn nên mai sẽ tự hiện lại' : '', [], 3000);
+    on && T.overdue(t) ? 'Việc trễ hạn nên mai sẽ tự hiện lại' : '', [], 3000);
 }
 // thu gọn / mở rộng việc con của một việc cha (kiểu mở list). Trạng thái chỉ trong phiên, không lưu DB.
 function foldKids(id) { ui.fold[id] = !ui.fold[id]; render(); }

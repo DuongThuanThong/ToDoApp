@@ -2,6 +2,8 @@
 
 **Ứng dụng quản lý công việc cho desktop Windows** — chạy nền, có cửa sổ mini neo ở mép màn hình, luôn sẵn sàng mà không chiếm chỗ làm việc.
 
+`v1.0.5` · Electron · dữ liệu lưu trên máy bạn
+
 > Gõ một dòng là xong việc: `Họp team #cv !cao 15h mai ~45p`
 
 ![Danh sách việc](screenshots/list.png)
@@ -19,7 +21,7 @@ ToDoApp là app quản lý việc cá nhân, lấy cảm hứng từ TickTick, T
 | | |
 |---|---|
 | 📋 **5 kiểu xem** | Danh sách · Kanban · Lịch tháng · Timeline 14 ngày · Ma trận Eisenhower |
-| ☀ **Hôm nay của tôi** | Chia **4 nhóm theo lý do**: Việc hôm nay (◉) · Trễ hẹn (⏰) · Chưa có hạn — việc làm thường xuyên (☀) · Tự chọn hạn sau. Bỏ một việc ra thì nó ẩn hết hôm nay, mai lại hiện |
+| ☀ **Hôm nay của tôi** | Chia **4 nhóm theo lý do**: Việc hôm nay (◉) · Trễ hẹn (⏰) · Chưa có hạn — việc làm thường xuyên (☀) · Tự chọn hạn sau. **Mọi việc ở khung "Hôm nay" đều nằm ở đây**; việc chưa có hạn thì phải bấm ☀ mới vào |
 | ⏰ **Trễ hẹn** | Gom việc quá hạn theo **từng ngày đến hạn**, thư mục ghi rõ **trễ bao nhiêu ngày** |
 | 🌳 **Việc cha – con** | Việc con thừa hưởng hạn của cha, thu gọn/mở rộng từng nhóm |
 | ↻ **Việc lặp lại** | Mỗi ngày / tuần / tháng / năm, **theo thứ trong tuần** (T2·T4…) hoặc **ngày trong tháng** (15, cuối) — kèm **giờ** riêng |
@@ -41,9 +43,13 @@ ToDoApp là app quản lý việc cá nhân, lấy cảm hứng từ TickTick, T
 |---|---|
 | ![Lịch](screenshots/calendar.png) | ![Kanban](screenshots/kanban.png) |
 
-| Timeline 14 ngày | Hướng dẫn trong app |
+| Timeline 14 ngày | Hướng dẫn trong app (2 tab) |
 |---|---|
 | ![Timeline](screenshots/timeline.png) | ![Hướng dẫn](screenshots/help.png) |
+
+| Giải thích khung việc (tab 2) | Đã xoá (thùng rác) |
+|---|---|
+| ![Giải thích khung việc](screenshots/help-frame.png) | ![Đã xoá](screenshots/trash.png) |
 
 ---
 
@@ -101,7 +107,7 @@ Thêm xong app mở luôn bảng chi tiết và đặt con trỏ vào ô tiêu �
 
 | Mục | Nội dung |
 |---|---|
-| **Hôm nay của tôi** | Việc **có hạn hôm nay** + việc **đã trễ** (tự động) cộng việc *bạn tự chọn* — và chia sẵn thành 4 nhóm: **Việc hôm nay · Trễ hẹn · Chưa có hạn (làm thường xuyên) · Tự chọn hạn sau**. Bấm ☀ ở mỗi dòng để thêm / bỏ ra |
+| **Hôm nay của tôi** | Việc **đến hạn hôm nay** + việc **lặp rơi vào hôm nay** + việc **đã trễ** (tự động) cộng việc *bạn tự chọn bằng ☀*. Chia sẵn thành 4 nhóm: **Việc hôm nay · Trễ hẹn · Chưa có hạn (làm thường xuyên) · Tự chọn hạn sau**. Việc chưa có hạn **mặc định không nằm trong đây** — bấm ☀ mới vào. Việc đến hạn/lặp hôm nay thì luôn nằm trong đó (bấm cũng không bỏ ra được); chỉ việc **trễ** mới bỏ ra được, và mai tự hiện lại |
 | **Hôm nay** | Việc có hạn **đúng hôm nay**, cộng việc **lặp** có lịch rơi vào hôm nay (việc lặp thường không có hạn riêng) |
 | **Trễ hẹn** | Việc **đã quá hạn**, gom theo **từng ngày đến hạn** — thư mục ghi rõ **trễ bao nhiêu ngày** |
 | **Sắp tới** | Việc có hạn trong những ngày tới, gom thành thư mục theo từng ngày |
@@ -199,7 +205,7 @@ Nếu tổ hợp bị app khác (IME tiếng Việt, PowerToys, Snip…) chiếm
 
 Tất cả đều **đổi được**: ⚙ Tuỳ biến → "Phím tắt TRONG app" → **Đổi** → bấm tổ hợp mới.
 
-> Xem lại toàn bộ phím tắt + hướng dẫn nhanh ngay trong app: nút **❔ Hướng dẫn** ở chân thanh bên trái.
+> Nút **❔ Hướng dẫn** ở chân thanh bên trái có **2 tab**: *Hướng dẫn & phím tắt* (kèm số phiên bản) và *Giải thích khung việc* (từng mục trong một dòng việc là gì, các nút dễ gây khó hiểu làm gì).
 
 ---
 

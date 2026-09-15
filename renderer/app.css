@@ -371,6 +371,9 @@ body.mini .kids-tg { width: .72rem; font-size: .6rem; }
 .keylist { display: flex; flex-direction: column; gap: .25rem; }
 .keyrow { display: flex; align-items: center; gap: .35rem; font-size: .8rem; }
 .keycap { font-size: .7rem; padding: .1rem .35rem; border: 1px solid hsl(var(--border)); border-radius: 4px; background: hsl(var(--muted)); }
+.ver { font-size: .7rem; padding: .1rem .45rem; border: 1px solid hsl(var(--border)); border-radius: 99px; background: hsl(var(--muted)); color: hsl(var(--muted-foreground)); }
+.help-tabs { margin-bottom: .8rem; }
+.help-tabs button { flex: 1; }
 /* chân sidebar: Thống kê / Hướng dẫn / Tuỳ biến nằm GỌN TRONG 1 HÀNG NGANG */
 .side-foot { padding: .45rem .45rem; border-top: 1px solid hsl(var(--border)); display: flex; gap: .25rem; }
 .side-foot .btn {

@@ -97,9 +97,11 @@ function row(t, { sub = false, last = false, fold = 0 } = {}) {
     h('div', { class: 'row-side' },
       h('button', {
         class: 'btn ghost myday-btn' + (T.inMyDay(t) ? ' on' : ''),
-        title: T.inMyDay(t)
-          ? 'Việc này đang nằm trong "Hôm nay của tôi" — bấm để bỏ ra'
-          : 'Cho việc này vào "Hôm nay của tôi" (việc tự chọn làm hôm nay; việc có hạn hôm nay tự nằm sẵn trong đó)',
+        title: T.plannedToday(t)
+          ? 'Việc này LUÔN nằm trong "Hôm nay của tôi" vì nó đến hạn (hoặc lặp) đúng hôm nay — không bỏ ra được'
+          : T.inMyDay(t)
+            ? 'Việc này đang nằm trong "Hôm nay của tôi" — bấm để bỏ ra'
+            : 'Cho việc này vào "Hôm nay của tôi" (việc chưa có hạn đứng ngoài cho tới khi bạn bấm ☀)',
         onclick: (e) => { e.stopPropagation(); toggleMyDay(t); },
       }, T.inMyDay(t) ? '☀' : '☁'),
       h('button', { class: 'btn ghost icon sm', title: 'Xoá việc (có hỏi lại)', onclick: (e) => { e.stopPropagation(); delTask(t); } }, '✕')));

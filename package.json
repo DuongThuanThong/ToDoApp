@@ -1,6 +1,6 @@
 {
   "name": "todoapp",
-  "version": "0.1.0",
+  "version": "1.0.5",
   "description": "ToDoApp - quan ly cong viec desktop (TickTick/Things-inspired), chay nen + mini window neo canh man hinh",
   "main": "main.js",
   "scripts": {

@@ -182,6 +182,7 @@ const ui = {
   confirm: null,                   // id việc đang chờ xác nhận xoá
   newList: false,
   renameList: null,   // id danh sách đang sửa tên tại chỗ ở sidebar (null = không sửa)
+  helpTab: 'guide',   // tab đang mở trong hộp Hướng dẫn: 'guide' (phím tắt) | 'frame' (giải thích khung việc)
 };
 let dragId = null, dragEnd = 0, pendingDb = null, toastTimer = [], miniAddInput = null;   // dragEnd: chặn click mở chi tiết ngay sau khi kéo
 const typing = () => /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '');

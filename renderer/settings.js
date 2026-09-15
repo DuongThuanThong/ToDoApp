@@ -189,7 +189,7 @@ const TIPS = [
 const GUIDE = [
   ['Bấm vào một dòng việc', 'mở bảng chi tiết để sửa tiêu đề, hạn, ưu tiên, nhãn, ghi chú, nhắc, lặp'],
   ['Kéo thả dòng việc', 'đổi thứ tự trong danh sách; kéo vào cột Kanban → trạng thái, ô Ma trận → ưu tiên + hạn, ô Lịch → ngày đến hạn'],
-  ['Nút ☀ ở mỗi dòng', 'cho việc vào "Hôm nay của tôi"; bấm lần nữa để bỏ ra (việc có hạn hôm nay / đã trễ tự nằm sẵn trong đó, bỏ ra thì mai lại hiện)'],
+  ['Nút ☀ ở mỗi dòng', 'cho việc vào "Hôm nay của tôi"; bấm lần nữa để bỏ ra. Việc ĐẾN HẠN hôm nay hoặc việc LẶP rơi vào hôm nay thì tự nằm sẵn và KHÔNG bỏ ra được (bấm chỉ để xem lý do); việc quá hạn bỏ ra thì mai lại tự hiện'],
   ['Mũi tên ▾ cạnh việc cha', 'thu gọn / mở rộng việc con'],
   ['Việc cha – con', 'việc con thừa hưởng hạn của cha; tự đặt hạn riêng thì sau đó cha đổi hạn cũng không ghi đè'],
   ['Việc lặp lại', 'mở chi tiết → "Lặp lại" (mỗi ngày / tuần / tháng / năm). Hằng tuần thì bấm các THỨ (T2 T4…), hằng tháng thì gõ NGÀY ("15, cuối" — cuối tự biết 28/29/30/31), kèm GIỜ riêng cho mỗi kỳ. Tick xong thì lần kế tiếp tự sinh vào đúng ngày, không hiện lại ngay'],
@@ -199,6 +199,37 @@ const GUIDE = [
   ['Cửa sổ mini', 'bấm tên cạnh logo để đổi danh sách đang xem; kéo mép cửa sổ để thu thành thanh mũi tên ở cạnh màn hình; rê chuột vào thanh đó để mở tạm'],
 ];
 const PRIVACY = 'Dữ liệu nằm hoàn toàn trên máy bạn (todoapp.json trong thư mục dữ liệu của app), không gửi đi đâu cả. App tự lưu dự phòng .bak và tự phục hồi nếu file chính hỏng.';
+
+/* Tab 2: giải thích CHI TIẾT khung chứa việc — người dùng hay hỏi "cái này là gì, nút này làm gì". */
+const ANATOMY = [
+  ['▾ ▸', 'Nút thu gọn / mở rộng việc con (chỉ hiện khi việc có việc con). Trạng thái không lưu, mở lại app là mở sẵn.'],
+  ['●', 'Chấm ƯU TIÊN ở sát mép trái: xám = không, xanh = thấp, vàng = trung bình, đỏ = cao. Rê chuột lên chấm để xem chữ.'],
+  ['✓', 'Nút tròn HOÀN THÀNH. Bấm là việc xong (có tiếng báo nếu bạn bật ở Tuỳ biến). Việc lặp thì app tự sinh kỳ kế tiếp.'],
+  ['Tên việc', 'Bấm vào dòng để mở bảng chi tiết: tiêu đề, hạn, ưu tiên, nhãn, ghi chú, nhắc nhở, lặp lại.'],
+  ['📅 15:00', 'HẠN của việc (lúc phải xong). Việc trễ hạn đổi thành ⏰ màu đỏ.'],
+  ['theo cha', 'Việc con CHƯA tự đặt hạn nên đang dùng hạn của việc cha. Tự đặt hạn riêng thì nhãn này biến mất.'],
+  ['▶ 09:00', 'GIỜ BẮT ĐẦU — khác hạn: đây là lúc bạn định làm, hạn là lúc phải xong.'],
+  ['45p', 'THỜI LƯỢNG ước lượng. Dùng cho nút "🗓 Xếp lịch" (xếp việc vào khung giờ trống).'],
+  ['☑ 2/3', 'Tiến độ việc con: đã xong 2 trên 3.'],
+  ['↻ hằng tuần · T2 T4 · 07:00', 'Việc LẶP LẠI kèm lịch: kiểu lặp, các thứ/ngày trong kỳ, và giờ của mỗi kỳ.'],
+  ['🔔', 'Việc có NHẮC NHỞ (app báo trước hạn bao lâu — đặt ở bảng chi tiết).'],
+  ['📝', 'Việc có GHI CHÚ.'],
+  ['#nhãn', 'NHÃN bạn gán — gõ #tênkhi thêm việc, hoặc sửa trong bảng chi tiết.'],
+  ['2 ngày trước', 'Thời điểm TẠO việc (rê chuột để xem giờ chính xác).'],
+  ['Thụt vào 1 tab', 'Việc CON luôn thụt vào đúng 1 tab so với việc cha, để nhìn là biết ngay ai thuộc ai.'],
+];
+const ROWBTN = [
+  ['☀ / ☁', 'Nút "Hôm nay của tôi" ở cuối mỗi dòng. ☀ = việc ĐANG nằm trong khung "Hôm nay của tôi"; ☁ = chưa. Việc đến hạn hôm nay hoặc việc lặp rơi vào hôm nay thì TỰ nằm sẵn (bấm cũng không bỏ ra được — bấm chỉ để xem lý do). Việc chưa có hạn thì mặc định KHÔNG nằm trong đó, bấm ☀ mới hiện.'],
+  ['✕ (cuối dòng việc)', 'XOÁ VIỆC — có hỏi lại trước khi xoá, và chỉ chuyển vào "Đã xoá" chứ không mất: khôi phục được trong 30 ngày.'],
+  ['✎ (sidebar, cạnh tên danh sách)', 'ĐỔI TÊN danh sách ngay tại chỗ: Enter = lưu, Esc = bỏ. Khác hẳn ✕ bên cạnh (✕ là xoá cả danh sách đó).'],
+  ['◉ ⏰ ☀ ▤ ▢ ✓ 🗑', 'Biểu tượng các khung ở sidebar, theo thứ tự: Hôm nay · Trễ hẹn · Hôm nay của tôi · Sắp tới · Chưa có hạn · Đã hoàn thành · Đã xoá. Rê chuột lên từng mục để đọc mô tả.'],
+  ['Danh sách / Kanban / Lịch / Timeline / Ma trận', '5 KIỂU XEM — cùng một dữ liệu, chỉ đổi cách nhìn. Kanban = theo trạng thái, Lịch = theo ngày, Ma trận = theo ưu tiên × khẩn cấp.'],
+  ['⛃ Bộ lọc', 'Mở BẢNG LỌC (chọn bằng nút, không phải gõ cú pháp): thời gian, mốc ngày, ưu tiên, nhãn, danh sách, trạng thái. Số trong ngoặc = số điều kiện đang bật.'],
+  ['Sắp xếp: …', 'Đổi THỨ TỰ hiển thị (tự do / ưu tiên cao trước / hạn gần trước / tên A→Z). Chọn "Tự do" thì kéo thả được.'],
+  ['🗓 Xếp lịch', 'XẾP VIỆC VÀO KHUNG GIỜ TRỐNG: việc có thời lượng sẽ được đặt giờ bắt đầu vào các khoảng trống trong ngày.'],
+  ['⧉', 'Mở CỬA SỔ MINI (bản thu nhỏ luôn nổi trên màn hình, kéo mép để thu thành thanh mũi tên ở cạnh màn hình).'],
+  ['Dọn sạch (trong "Đã xoá")', 'Xoá VĨNH VIỄN mọi việc trong thùng rác ngay, không chờ 30 ngày.'],
+];
 
 function helpModal() {
   const s = db.settings;
@@ -212,50 +243,70 @@ function helpModal() {
     ['Enter', 'Lưu ô đang sửa · ở ô thêm việc là tạo việc mới'],
   ];
   const row = ([k, label]) => h('div', { class: 'keyrow' }, h('code', { class: 'keycap' }, k), h('span', { class: 'grow' }, label));
+  const hl = (list) => h('div', { class: 'helplist' }, ...list.map(([t, d]) => h('div', { class: 'helpitem' },
+    h('b', null, t), h('span', { class: 'muted' }, ' — ' + d))));
+  const tab = ui.helpTab === 'frame' ? 'frame' : 'guide';
+
+  const body = tab === 'guide' ? [
+    // Khung tác giả: tác giả · model · AI agent — 3 ô đều nhau, có viền bao quanh
+    h('div', { class: 'author' },
+      h('div', { class: 'a-item' }, h('span', { class: 'k' }, 'Tác giả'), h('b', null, AUTHOR.name)),
+      h('div', { class: 'a-item' }, h('span', { class: 'k' }, 'Model'), h('b', null, AUTHOR.model)),
+      h('div', { class: 'a-item agent' }, h('span', { class: 'k' }, 'AI agent'), h('b', null, AUTHOR.agent))),
+    h('div', { class: 'sep' }),
+
+    h('div', { class: 'lbl' }, 'Phím tắt TRONG app (khi app đang mở)'),
+    h('div', { class: 'keylist' }, ...localKeys.map(row)),
+    h('div', { class: 'muted', style: { fontSize: '.72rem', margin: '.35rem 0 .2rem' } }, 'Đổi được ở ⚙ Tuỳ biến → "Phím tắt TRONG app".'),
+
+    h('div', { class: 'sep' }),
+    h('div', { class: 'lbl' }, 'Phím tắt TOÀN CỤC (dùng được cả khi đang làm việc khác)'),
+    h('div', { class: 'keylist' }, globalKeys.length ? globalKeys.map(row) : h('div', { class: 'muted', style: { fontSize: '.8rem' } }, 'Chưa đặt được phím nào — máy bạn đang bị app khác giữ hết tổ hợp.')),
+
+    h('div', { class: 'sep' }),
+    h('div', { class: 'lbl' }, 'Gõ nhanh khi thêm việc'),
+    h('div', { class: 'keylist' }, ...TIPS.map(row)),
+
+    h('div', { class: 'sep' }),
+    h('div', { class: 'lbl' }, 'Dùng trong 1 phút'),
+    hl(GUIDE),
+
+    h('div', { class: 'sep' }),
+    h('div', { class: 'lbl' }, 'Việc lặp lại'),
+    hl([
+      ['Lặp theo thứ (hằng tuần)', 'chọn "Hằng tuần" rồi bấm các thứ, ví dụ T2 T4; đặt thêm giờ (VD 07:00) để lần lặp rơi đúng giờ đó'],
+      ['Lặp theo ngày (hằng tháng)', 'chọn "Hằng tháng" rồi gõ ngày, ví dụ "15, cuối"; chữ "cuối" tự hiểu ngày cuối tháng (28/29/30/31), "đầu" là ngày 1'],
+      ['Mỗi N …', '"Mỗi (tuần)" = 2 nghĩa là cách 2 tuần một lần'],
+    ]),
+
+    h('div', { class: 'sep' }),
+    h('div', { class: 'lbl' }, 'Âm thanh'),
+    hl([['Tiếng báo khi xong việc', 'mặc định có tiếng "ting"; tắt được ở ⚙ Tuỳ biến, và chọn được file âm thanh riêng của bạn (mp3/wav/ogg…)']]),
+
+    h('div', { class: 'sep' }),
+    h('div', { class: 'lbl' }, 'Dữ liệu của bạn'),
+    h('div', { class: 'muted', style: { fontSize: '.78rem' } }, PRIVACY),
+  ] : [
+    h('div', { class: 'lbl' }, 'Một dòng việc gồm những gì (nhìn từ trái sang phải)'),
+    hl(ANATOMY),
+    h('div', { class: 'sep' }),
+    h('div', { class: 'lbl' }, 'Các nút / mục dễ gây khó hiểu'),
+    hl(ROWBTN),
+    h('div', { class: 'sep' }),
+    h('div', { class: 'muted', style: { fontSize: '.78rem' } }, 'Mẹo: rê chuột lên gần như mọi nút và mọi chip đều hiện chú thích giải thích nút đó làm gì.'),
+  ];
+
   return h('div', { class: 'overlay' },   // chỉ đóng bằng nút Đóng / ✕ / Esc
     h('div', { class: 'card modal', id: 'helpModal' },
-      h('div', { class: 'modal-head' }, h('h3', null, 'Hướng dẫn & phím tắt'), h('span', { class: 'grow' }),
+      h('div', { class: 'modal-head' }, h('h3', null, 'Hướng dẫn'),
+        h('span', { class: 'ver', title: 'Phiên bản app' }, 'v' + (API.version || '?')),
+        h('span', { class: 'grow' }),
         h('button', { class: 'btn ghost icon sm', id: 'helpClose', title: 'Đóng (Esc)', onclick: () => { ui.modal = null; render(); } }, '✕')),
-      // Khung tác giả: tác giả · model · AI agent — 3 ô đều nhau, có viền bao quanh
-      h('div', { class: 'author' },
-        h('div', { class: 'a-item' }, h('span', { class: 'k' }, 'Tác giả'), h('b', null, AUTHOR.name)),
-        h('div', { class: 'a-item' }, h('span', { class: 'k' }, 'Model'), h('b', null, AUTHOR.model)),
-        h('div', { class: 'a-item agent' }, h('span', { class: 'k' }, 'AI agent'), h('b', null, AUTHOR.agent))),
+      h('div', { class: 'tabs help-tabs' },
+        ...[['guide', '❔ Hướng dẫn & phím tắt'], ['frame', '🔎 Giải thích khung việc']].map(([v, n]) =>
+          h('button', { class: tab === v ? 'on' : '', onclick: () => { ui.helpTab = v; render(); } }, n))),
+      ...body,
       h('div', { class: 'sep' }),
-
-      h('div', { class: 'lbl' }, 'Phím tắt TRONG app (khi app đang mở)'),
-      h('div', { class: 'keylist' }, ...localKeys.map(row)),
-      h('div', { class: 'muted', style: { fontSize: '.72rem', margin: '.35rem 0 .2rem' } }, 'Đổi được ở ⚙ Tuỳ biến → "Phím tắt TRONG app".'),
-
-      h('div', { class: 'sep' }),
-      h('div', { class: 'lbl' }, 'Phím tắt TOÀN CỤC (dùng được cả khi đang làm việc khác)'),
-      h('div', { class: 'keylist' }, globalKeys.length ? globalKeys.map(row) : h('div', { class: 'muted', style: { fontSize: '.8rem' } }, 'Chưa đặt được phím nào — máy bạn đang bị app khác giữ hết tổ hợp.')),
-
-      h('div', { class: 'sep' }),
-      h('div', { class: 'lbl' }, 'Gõ nhanh khi thêm việc'),
-      h('div', { class: 'keylist' }, ...TIPS.map(row)),
-
-      h('div', { class: 'sep' }),
-      h('div', { class: 'lbl' }, 'Dùng trong 1 phút'),
-      h('div', { class: 'helplist' }, ...GUIDE.map(([t, d]) => h('div', { class: 'helpitem' },
-        h('b', null, t), h('span', { class: 'muted' }, ' — ' + d)))),
-
-      h('div', { class: 'sep' }),
-      h('div', { class: 'lbl' }, 'Việc lặp lại'),
-      h('div', { class: 'helplist' },
-        h('div', { class: 'helpitem' }, h('b', null, 'Lặp theo thứ (hằng tuần)'), h('span', { class: 'muted' }, ' — chọn "Hằng tuần" rồi bấm các thứ, ví dụ T2 T4; đặt thêm giờ (VD 07:00) để lần lặp rơi đúng giờ đó')),
-        h('div', { class: 'helpitem' }, h('b', null, 'Lặp theo ngày (hằng tháng)'), h('span', { class: 'muted' }, ' — chọn "Hằng tháng" rồi gõ ngày, ví dụ "15, cuối"; chữ "cuối" tự hiểu ngày cuối tháng (28/29/30/31), "đầu" là ngày 1')),
-        h('div', { class: 'helpitem' }, h('b', null, 'Mỗi N …'), h('span', { class: 'muted' }, ' — "Mỗi (tuần)" = 2 nghĩa là cách 2 tuần một lần'))),
-
-      h('div', { class: 'sep' }),
-      h('div', { class: 'lbl' }, 'Âm thanh'),
-      h('div', { class: 'helplist' },
-        h('div', { class: 'helpitem' }, h('b', null, 'Tiếng báo khi xong việc'), h('span', { class: 'muted' }, ' — mặc định có tiếng "ting"; tắt được ở ⚙ Tuỳ biến, và chọn được file âm thanh riêng của bạn (mp3/wav/ogg…)'))),
-
-      h('div', { class: 'sep' }),
-      h('div', { class: 'lbl' }, 'Dữ liệu của bạn'),
-      h('div', { class: 'muted', style: { fontSize: '.78rem' } }, PRIVACY),
-
       h('div', { class: 'row2' },
         h('button', { class: 'btn outline', onclick: () => { ui.modal = 'settings'; render(); } }, 'Tuỳ biến'),
         h('button', { class: 'btn', onclick: () => { ui.modal = null; render(); } }, 'Đóng'))));
