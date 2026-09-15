@@ -43,6 +43,10 @@ if (!app.requestSingleInstanceLock()) {
     const hk = H.registerAll();
     console.log(`HOTKEY chon=${hk.wanted} dangchay=${hk.hotkey} ok=${hk.hotkeyOk} quickadd=${hk.quickAdd} ok=${hk.quickAddOk} duphong=${hk.fellBack}`);
     R.start();
+    // Thùng rác tự dọn: việc đã xoá quá 30 ngày thì mất hẳn (kiểm mỗi ngày một lần cho app chạy lâu ngày).
+    const purge = () => { if (S.purgeTrash(S.get())) S.save(false); };
+    purge();
+    setInterval(purge, 864e5).unref?.();
     if (S.get().settings.autostart) A.set(true);
     if (SMOKE) require('./lib/smoke')();
   });

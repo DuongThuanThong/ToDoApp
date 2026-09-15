@@ -34,7 +34,7 @@ function miniView() {
     onkeydown: (e) => { if (e.key === 'Enter') { addTask(e.target.value); e.target.value = ''; } },
   });
   miniAddInput = i;
-  const empty = ui.view === 'completed' ? 'Chưa hoàn thành việc nào.' : ['myday', 'today'].includes(ui.view) ? 'Hết việc 🎉' : 'Không có việc nào.';
+  const empty = ui.view === 'completed' ? 'Chưa hoàn thành việc nào.' : ['myday', 'today', 'late'].includes(ui.view) ? 'Hết việc 🎉' : 'Không có việc nào.';
   const box = h('div', { class: 'mini' },
     h('div', { class: 'mini-head drag' },
       h('img', { class: 'brand-ic', src: ICON_SRC, alt: '' }),

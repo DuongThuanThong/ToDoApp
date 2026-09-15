@@ -3,7 +3,8 @@
 /* ---------------- sidebar ---------------- */
 const NAV_HELP = {
   myday: 'Việc đến hạn hôm nay + việc đã trễ + việc bạn TỰ CHỌN (bấm ☁ ở mỗi việc để thêm vào, ☀ để bỏ ra)',
-  today: 'Việc có HẠN hôm nay, kể cả việc đã trễ hạn (tự động theo ngày đến hạn)',
+  today: 'Việc có HẠN đúng hôm nay (việc quá hạn nằm ở "Trễ hẹn")',
+  late: 'Gom MỌI việc đã quá hạn chót mà chưa xong — cũ nhất lên trước',
   upcoming: 'Việc có hạn trong những ngày tới, gom theo từng ngày',
   nodate: 'Việc chưa đặt ngày đến hạn',
   completed: 'Log việc đã xong, gom theo từng ngày',
@@ -18,7 +19,7 @@ function sidebar() {
     h('div', { class: 'brand drag' }, h('img', { class: 'brand-ic', src: ICON_SRC, alt: '' }), h('span', null, 'ToDoApp')),
     h('div', { class: 'side-scroll' },
       ...VIEWS.map((v) => nav(...v)),
-      h('div', { class: 'side-hint' }, '☀ = việc bạn tự chọn · ◉ = việc đến hạn hôm nay (kể cả trễ)'),
+      h('div', { class: 'side-hint' }, '☀ = việc bạn tự chọn · ◉ = hạn hôm nay · ⏰ = đã trễ hẹn'),
       h('div', { class: 'side-lbl' }, 'Danh sách'),
       ...db.lists.map((l) => h('button', { class: 'nav' + (ui.view === l.id ? ' on' : ''), onclick: () => { ui.view = l.id; render(); } },
         h('span', { class: 'ic' }, '#'), h('span', null, l.name), h('span', { class: 'ct' }, count(l.id) || ''),

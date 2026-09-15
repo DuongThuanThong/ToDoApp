@@ -184,7 +184,7 @@ const GUIDE = [
   ['Mũi tên ▾ cạnh việc cha', 'thu gọn / mở rộng việc con'],
   ['Việc cha – con', 'việc con thừa hưởng hạn của cha; tự đặt hạn riêng thì sau đó cha đổi hạn cũng không ghi đè'],
   ['Việc lặp lại', 'mở chi tiết → "Lặp lại" (mỗi ngày / tuần / tháng / năm). Tick xong thì lần kế tiếp tự sinh vào đúng ngày, không hiện lại ngay'],
-  ['Xoá việc', 'chuyển vào "Đã xoá" chứ không mất — khôi phục được bất cứ lúc nào, chỉ mất khi bạn bấm "Dọn sạch"'],
+  ['Xoá việc', 'chuyển vào "Đã xoá" chứ không mất — khôi phục được bất cứ lúc nào; việc nằm trong đó quá 30 ngày sẽ bị dọn hẳn'],
   ['"Sắp tới" & "Đã hoàn thành"', 'gom thành thư mục theo từng ngày, bấm vào tên ngày để gập/mở'],
   ['Cửa sổ mini', 'bấm tên cạnh logo để đổi danh sách đang xem; kéo mép cửa sổ để thu thành thanh mũi tên ở cạnh màn hình; rê chuột vào thanh đó để mở tạm'],
 ];

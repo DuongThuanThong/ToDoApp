@@ -31,6 +31,7 @@ const WEEK = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
 const VIEWS = [
   ['myday', '☀', 'Hôm nay của tôi'],
   ['today', '◉', 'Hôm nay'],
+  ['late', '⏰', 'Trễ hẹn'],
   ['upcoming', '▤', 'Sắp tới'],
   ['nodate', '▢', 'Chưa có hạn'],
   ['completed', '✓', 'Đã hoàn thành'],
@@ -128,6 +129,9 @@ function applyTheme() {
   r.style.setProperty('--bg-img', s.bg ? `url("${String(s.bg).replace(/\\/g, '/').replace(/"/g, '')}")` : 'none');
   r.style.setProperty('--bg-alpha2', s.bgOpacity ?? 0.55);
   r.style.setProperty('--bg-blur2', (s.bgBlur || 0) + 'px');
+  // Thanh mép mini: bề dày đúng bằng tabSize người dùng đặt; màu thì ăn theo hệ thống màu của app
+  // (xem .edge-tab trong app.css) nên không cần biến màu riêng.
+  r.style.setProperty('--tab-w', Math.max(4, Math.min(24, +(s.tabSize ?? 10))) + 'px');
 }
 
 /* ---------------- toast ---------------- */
