@@ -151,6 +151,8 @@ select.input option { background: hsl(var(--card)); color: hsl(var(--card-foregr
   border-radius: 99px; padding: .18rem .5rem; font-size: .7rem; cursor: pointer; white-space: nowrap;
 }
 .chip:hover { background: hsl(var(--accent)); color: hsl(var(--foreground)); border-color: hsl(var(--ring)); }
+.chip.on { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); border-color: hsl(var(--ring)); font-weight: 600; }
+.rechip { min-width: 2.1rem; text-align: center; }
 .filter { max-width: 190px; font-family: ui-monospace, Consolas, monospace; font-size: .78rem; }
 .tabs { display: flex; gap: .15rem; padding: .15rem; background: hsl(var(--muted)); border-radius: calc(var(--radius) - 2px); }
 .tabs button { border: 0; background: transparent; cursor: pointer; padding: .3rem .6rem; border-radius: calc(var(--radius) - 5px); font-size: .8rem; color: hsl(var(--muted-foreground)); }

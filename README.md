@@ -22,7 +22,7 @@ ToDoApp là app quản lý việc cá nhân, lấy cảm hứng từ TickTick, T
 | ☀ **Hôm nay của tôi** | Chia **4 nhóm theo lý do**: Việc hôm nay (◉) · Trễ hẹn (⏰) · Chưa có hạn — việc làm thường xuyên (☀) · Tự chọn hạn sau. Bỏ một việc ra thì nó ẩn hết hôm nay, mai lại hiện |
 | ⏰ **Trễ hẹn** | Gom việc quá hạn theo **từng ngày đến hạn**, thư mục ghi rõ **trễ bao nhiêu ngày** |
 | 🌳 **Việc cha – con** | Việc con thừa hưởng hạn của cha, thu gọn/mở rộng từng nhóm |
-| ↻ **Việc lặp lại** | Mỗi ngày / tuần / tháng / năm. Tick xong, lần kế tiếp tự sinh vào đúng ngày |
+| ↻ **Việc lặp lại** | Mỗi ngày / tuần / tháng / năm, **theo thứ trong tuần** (T2·T4…) hoặc **ngày trong tháng** (15, cuối) — kèm **giờ** riêng |
 | 🖱 **Kéo thả** | Đổi thứ tự, đổi trạng thái, đổi hạn, đổi mức ưu tiên — kéo là xong |
 | 🪟 **Cửa sổ mini** | Neo 4 mép, thu thành thanh mũi tên, đổi được danh sách đang xem, thêm việc nhanh |
 | 🔔 **Nhắc nhở** | Thông báo nổi của Windows trước hạn N phút, có nút "Xong" / "Hoãn 10p" / "Hoãn 1h" |
@@ -139,9 +139,21 @@ Bấm vào dòng việc để mở: tiêu đề, hạn, giờ bắt đầu, ư�
 
 Mở chi tiết → **Lặp lại** → chọn *Mỗi ngày / tuần / tháng / năm*.
 
+- **Hằng tuần theo thứ**: chọn *Hằng tuần* rồi bấm các thứ — ví dụ **T2 T4** cho lịch Reading, thêm **Giờ của lần lặp** = `07:00` là mỗi lần rơi đúng 7h sáng.
+- **Hằng tháng theo ngày**: chọn *Hằng tháng* rồi gõ ngày — ví dụ `15, cuối`. Chữ **cuối** tự hiểu ngày cuối tháng (tháng 2 là 28, tháng 4 là 30…), **đầu** là ngày 1. Ngày 31 gặp tháng ít ngày hơn sẽ lấy ngày cuối tháng đó.
+- **Mỗi N …**: ô "Mỗi (tuần)" = 2 nghĩa là cách 2 tuần một lần.
+
 Tick xong một việc lặp, app tự sinh lần kế tiếp vào **đúng ngày đến hạn mới** — lần mới không thừa hưởng trạng thái của lần vừa xong, nên không hiện lại ngay trong "Hôm nay của tôi".
 
-### 7. Cửa sổ mini
+### 7. Âm thanh khi xong việc
+
+Tick xong một việc là có tiếng **"ting"** báo. Vào ⚙ **Tuỳ biến**:
+
+- tắt/bật tiếng,
+- **Chọn…** một file âm thanh của riêng bạn (mp3, wav, ogg, m4a…),
+- **Nghe thử** để nghe trước khi dùng.
+
+### 8. Cửa sổ mini
 
 - **Mở/thu** bằng phím tắt toàn cục (mặc định `Ctrl+Shift+Space`) hoặc icon ⧉ trên thanh công cụ.
 - Bấm **tên danh sách cạnh logo** để đổi đang xem gì (Hôm nay của tôi / Hôm nay / Sắp tới / Chưa có hạn / Đã hoàn thành).
@@ -151,7 +163,7 @@ Tick xong một việc lặp, app tự sinh lần kế tiếp vào **đúng ngà
 - Bật **Tự thu vào mép** thì bấm ra ngoài là nó tự thu — nhưng nếu đang chọn "Thanh mũi tên" thì thanh vẫn nằm đó.
 - Rê chuột vào thanh mũi tên: mở tạm, rời chuột tự thu (tắt được ở Tuỳ biến).
 
-### 8. Nhắc nhở
+### 9. Nhắc nhở
 
 Mở chi tiết → **Nhắc trước** (mặc định 10 phút). Tới giờ, Windows hiện thông báo kèm tiếng chuông, có nút **Xong**, **Hoãn 10p**, **Hoãn 1h**.
 

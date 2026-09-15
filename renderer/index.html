@@ -2,8 +2,9 @@
 <html lang="vi" data-theme="dark">
 <head>
   <meta charset="utf-8" />
+  <!-- media-src: tiếng báo khi xong việc có thể là file người dùng tự chọn (file://) -->
   <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; img-src 'self' data: file: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+        content="default-src 'self'; img-src 'self' data: file: blob:; media-src 'self' data: file: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'" />
   <title>ToDoApp</title>
   <link rel="stylesheet" href="app.css" />
 </head>

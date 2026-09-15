@@ -92,6 +92,71 @@ function lateLabel(key, items) {
   return `${n <= 1 ? 'Trễ từ hôm qua' : 'Trễ ' + n + ' ngày'} · ${d}/${m}/${y}`;
 }
 
+/* ---------- nhãn/ô nhập cho việc LẶP LẠI ---------- */
+const WD_SHORT = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];      // khớp Date.getDay()
+const REPEAT_WHAT = { daily: 'ngày', weekly: 'tuần', monthly: 'tháng', yearly: 'năm' };
+const REPEAT_FULL = { daily: 'Hằng ngày', weekly: 'Hằng tuần', monthly: 'Hằng tháng', yearly: 'Hằng năm', after: 'Sau khi xong N ngày' };
+
+/* Nhãn ngắn cho chip ở danh sách: "hằng tuần · T2 T4 · 07:00", "hằng tháng · ngày 15, cuối" */
+function repeatText(r) {
+  if (!r || !r.type) return '';
+  if (r.type === 'after') return 'sau ' + (r.n || 1) + ' ngày';
+  const n = r.n || 1;
+  const moi = n > 1 ? n + ' ' + REPEAT_WHAT[r.type] : 'hằng ' + REPEAT_WHAT[r.type];
+  const days = r.days || [];
+  const when = r.type === 'weekly' && days.length ? days.map((d) => WD_SHORT[d]).join(' ')
+    : r.type === 'monthly' && days.length ? 'ngày ' + monthDaysText(days) : '';
+  return [moi, when, /^\d{1,2}:\d{2}$/.test(String(r.time || '')) ? r.time : ''].filter(Boolean).join(' · ');
+}
+/* Ô nhập ngày trong tháng: "15, cuối" <-> [15, -1]. "cuối" = ngày cuối tháng (tự biết 28/29/30/31),
+   "đầu" = ngày 1. Ngày không hợp lệ thì bỏ qua chứ không nuốt cả chuỗi. */
+function parseMonthDays(str) {
+  const out = [];
+  for (const raw of String(str || '').split(/[,;]+/)) {
+    const s = raw.trim().toLowerCase();
+    if (!s) continue;
+    let v = parseInt(s, 10);
+    if (/^cu[oố]i|^last/.test(s)) v = -1;
+    else if (/^đ?ầu|^dau|^first/.test(s)) v = 1;
+    const day = v === -1 ? -1 : (v >= 1 && v <= 31 ? v : null);
+    if (day !== null && !out.includes(day)) out.push(day);
+  }
+  // "cuối" (-1) luôn xếp SAU các ngày số, để ô nhập đọc lại đúng thứ tự người dùng gõ
+  return out.sort((a, b) => (a === -1 ? 99 : a) - (b === -1 ? 99 : b));
+}
+const monthDaysText = (days) => (days || []).map((d) => (d === -1 ? 'cuối' : d)).join(', ');
+
+/* ---------- âm thanh khi hoàn thành việc ----------
+   Mặc định là tiếng "ting" tự tổng hợp bằng Web Audio (không kèm file, không thêm dependency).
+   Người dùng muốn tiếng riêng thì chọn 1 file trong Tuỳ biến -> phát chính file đó. */
+const fileUrl = (p) => 'file:///' + String(p).replace(/\\/g, '/').replace(/^\/+/, '');
+let audioCtx = null;
+function beepDone() {
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return;
+  audioCtx = audioCtx || new AC();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  const t0 = audioCtx.currentTime;
+  for (const [f, at] of [[880, 0], [1320, 0.09]]) {          // 2 nốt ngắn, nghe như "ting-ting"
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.type = 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(0, t0 + at);
+    g.gain.linearRampToValueAtTime(0.18, t0 + at + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + at + 0.18);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(t0 + at); o.stop(t0 + at + 0.2);
+  }
+}
+/* Phát tiếng báo xong. Không bao giờ được ném lỗi: hỏng âm thanh thì việc vẫn phải tick xong. */
+function playDone() {
+  const s = (db && db.settings) || {};
+  if (s.soundDone === false) return;
+  try {
+    if (s.soundDoneFile) { new Audio(fileUrl(s.soundDoneFile)).play().catch(beepDone); return; }
+    beepDone();
+  } catch { /* thiết bị không có âm thanh -> bỏ qua */ }
+}
+
 function hexToHsl(hex) {
   const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex || '');
   if (!m) return null;
@@ -271,6 +336,19 @@ if (typeof module !== 'undefined' && require.main === module) {
   assert.strictEqual(ymd(new Date(at(d0, 1, 9))), '2026-09-12');
   assert.match(fmtStamp(new Date().toISOString()), /^\d{2}:\d{2}$/);
   assert.strictEqual(fmtStamp(new Date(2026, 0, 2, 7, 5).toISOString()), '02/01 07:05');
+  // ô nhập ngày trong tháng <-> mảng: "cuối" là -1, "đầu" là 1, rác thì bỏ qua
+  assert.deepStrictEqual(parseMonthDays('15, cuối'), [15, -1]);
+  assert.deepStrictEqual(parseMonthDays('cuối, 15'), [15, -1]);
+  assert.deepStrictEqual(parseMonthDays('đầu, 31'), [1, 31]);
+  assert.deepStrictEqual(parseMonthDays('32, abc, 0, 15, 15'), [15], 'ngày ngoài 1..31 và trùng lặp phải bị loại');
+  assert.deepStrictEqual(parseMonthDays(''), []);
+  assert.strictEqual(monthDaysText([15, -1]), '15, cuối');
+  assert.strictEqual(fileUrl('C:\\a b\\ting.mp3'), 'file:///C:/a b/ting.mp3');
+  assert.strictEqual(repeatText({ type: 'weekly', n: 1, days: [1, 3], time: '07:00' }), 'hằng tuần · T2 T4 · 07:00');
+  assert.strictEqual(repeatText({ type: 'monthly', days: [15, -1] }), 'hằng tháng · ngày 15, cuối');
+  assert.strictEqual(repeatText({ type: 'monthly', n: 3, days: [1] }), '3 tháng · ngày 1');
+  assert.strictEqual(repeatText({ type: 'after', n: 2 }), 'sau 2 ngày');
+  assert.strictEqual(repeatText(null), '');
   const kev = (o) => ({ ctrlKey: false, metaKey: false, altKey: false, shiftKey: false, key: '', ...o });
   assert.strictEqual(keyMatch(kev({ ctrlKey: true, key: 'w' }), 'mod+w'), true);
   assert.strictEqual(keyMatch(kev({ ctrlKey: true, altKey: true, key: 'w' }), 'mod+w'), false);

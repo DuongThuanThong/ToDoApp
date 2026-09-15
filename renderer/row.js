@@ -89,7 +89,7 @@ function row(t, { sub = false, last = false, fold = 0 } = {}) {
         t.start ? chip('', '▶ ' + new Date(t.start).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })) : null,
         t.duration ? chip('', t.duration + 'p') : null,
         p ? chip('', `☑ ${p.done}/${p.total}`) : null,
-        t.repeat ? chip('', '↻ ' + t.repeat.type) : null,
+        t.repeat ? chip('', '↻ ' + repeatText(t.repeat)) : null,
         t.remind ? chip('', '🔔') : null,
         t.notes ? chip('', '📝') : null,
         ...(t.tags || []).map((x) => chip('tag', '#' + x)))),

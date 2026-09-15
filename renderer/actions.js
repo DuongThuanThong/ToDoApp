@@ -22,6 +22,7 @@ async function addTask(text, extra = {}) {
 function toggleTask(t) {
   if (!t) return;
   const was = t.done;
+  if (!was) playDone();          // tick xong -> tiếng báo (người dùng tắt được ở Tuỳ biến)
   API.toggleTask(t.id, !t.done).then((tasks) => {
     db.tasks = tasks;
     render();

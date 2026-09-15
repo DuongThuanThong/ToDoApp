@@ -20,6 +20,7 @@ contextBridge.exposeInMainWorld('api', {
   },
   openMain: () => ipcRenderer.invoke('open:main'),
   pickImage: () => ipcRenderer.invoke('dialog:pickImage'),
+  pickSound: () => ipcRenderer.invoke('dialog:pickSound'),
   notify: (title, body) => ipcRenderer.invoke('notify', { title, body }),
   autostart: (v) => ipcRenderer.invoke('app:autostart', v),
   hotkey: (accel) => ipcRenderer.invoke('app:hotkey', accel),

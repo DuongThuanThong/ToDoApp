@@ -66,15 +66,33 @@ function detailView() {
       f('Lặp lại', h('select', {
         class: 'input', onchange: (e) => {
           const v = e.target.value;
-          patch(t, { repeat: v === 'none' ? null : { type: v, n: t.repeat?.n || 1 } });
+          // đổi kiểu lặp thì bỏ `days` (thứ trong tuần ≠ ngày trong tháng), giữ nhịp n và giờ
+          patch(t, { repeat: v === 'none' ? null : { ...(t.repeat || {}), type: v, n: t.repeat?.n || 1, days: t.repeat?.type === v ? t.repeat.days : null } });
         },
       },
         h('option', { value: 'none', selected: !t.repeat }, 'Không lặp'),
-        ...[['daily', 'Hằng ngày'], ['weekly', 'Hằng tuần'], ['monthly', 'Hằng tháng'], ['yearly', 'Hằng năm'], ['after', 'Sau khi xong N ngày']]
-          .map(([v, n]) => h('option', { value: v, selected: t.repeat?.type === v }, n)))),
-      t.repeat
-        ? f('Mỗi (số lần)', h('input', { class: 'input', type: 'number', min: 1, value: t.repeat.n || 1, onchange: (e) => patch(t, { repeat: { ...t.repeat, n: Math.max(1, +e.target.value || 1) } }) }))
+        ...Object.entries(REPEAT_FULL).map(([v, n]) => h('option', { value: v, selected: t.repeat?.type === v }, n)))),
+      // nhịp: mỗi N ngày/tuần/tháng/năm (chỉ "sau khi xong" là N ngày chờ)
+      t.repeat ? f(t.repeat.type === 'after' ? 'Số ngày sau khi xong' : 'Mỗi (' + (REPEAT_WHAT[t.repeat.type] || 'lần') + ')',
+        h('input', { class: 'input', type: 'number', min: 1, value: t.repeat.n || 1, onchange: (e) => patch(t, { repeat: { ...t.repeat, n: Math.max(1, +e.target.value || 1) } }) }))
         : null,
+      // Lặp theo thứ trong tuần: "hằng tuần vào T2, T4". Không chọn thứ nào = lặp đúng thứ của hạn hiện tại.
+      t.repeat?.type === 'weekly' ? f('Vào các thứ', h('div', { class: 'chips' },
+        ...[1, 2, 3, 4, 5, 6, 0].map((wd) => h('button', {
+          class: 'chip rechip' + ((t.repeat.days || []).includes(wd) ? ' on' : ''),
+          onclick: () => patch(t, { repeat: { ...t.repeat, days: (t.repeat.days || []).includes(wd) ? t.repeat.days.filter((x) => x !== wd) : [...(t.repeat.days || []), wd].sort((a, b) => a - b) } }),
+        }, WD_SHORT[wd])))
+        ) : null,
+      // Lặp theo ngày trong tháng: gõ "15, cuối" — cuối = ngày cuối tháng, tự biết 28/29/30/31
+      t.repeat?.type === 'monthly' ? f('Vào các ngày', h('input', {
+        class: 'input', value: monthDaysText(t.repeat.days), placeholder: 'VD: 15, cuối',
+        onchange: (e) => patch(t, { repeat: { ...t.repeat, days: parseMonthDays(e.target.value) } }),
+      })) : null,
+      // giờ của lần lặp: "hằng tuần T2 T4 lúc 7h" — bỏ trống thì giữ giờ của hạn hiện tại
+      t.repeat && t.repeat.type !== 'after' ? f('Giờ của lần lặp', h('input', {
+        class: 'input', type: 'time', value: t.repeat.time || '',
+        onchange: (e) => patch(t, { repeat: { ...t.repeat, time: e.target.value || null } }),
+      })) : null,
       f('Ước tính (phút)', h('input', { class: 'input', type: 'number', min: 0, value: t.duration || 0, onchange: (e) => patch(t, { duration: +e.target.value || 0 }) })),
       f('Nhãn (cách nhau dấu phẩy)', h('input', {
         class: 'input', value: (t.tags || []).join(', '),
