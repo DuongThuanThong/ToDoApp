@@ -276,7 +276,13 @@ select.input option { background: hsl(var(--card)); color: hsl(var(--card-foregr
 }
 
 /* ---------- mini window ---------- */
-body.mini { background: transparent; overflow: hidden; }
+/* body cũng mang class .mini nên nó dính luôn rule .mini ở dưới (viền + bo góc + backdrop-filter):
+   lúc thu gọn thành thanh mép, cái viền 1px đó vẽ kín cả cửa sổ 43x45 -> nhìn ra như khung nút bự cũ
+   còn sót lại. Nền trong suốt thôi CHƯA đủ, phải bỏ luôn viền/bo góc/blur. */
+body.mini {
+  background: transparent; overflow: hidden;
+  border: 0; border-radius: 0; backdrop-filter: none; -webkit-backdrop-filter: none;
+}
 /* chi tiết mở ngay trong mini */
 body.mini .detail { width: 100%; border-left: 0; height: 100%; }
 body.mini .detail-head { display: none; }   /* mini có thanh .mini-head riêng -> ẩn để không lặp nút, không mất 40px chiều cao */
