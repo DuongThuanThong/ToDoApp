@@ -192,7 +192,7 @@ const GUIDE = [
   ['Nút ☀ ở mỗi dòng', 'cho việc vào "Hôm nay của tôi"; bấm lần nữa để bỏ ra. Việc ĐẾN HẠN hôm nay hoặc việc LẶP rơi vào hôm nay thì tự nằm sẵn và KHÔNG bỏ ra được (bấm chỉ để xem lý do); việc quá hạn bỏ ra thì mai lại tự hiện'],
   ['Mũi tên ▾ cạnh việc cha', 'thu gọn / mở rộng việc con'],
   ['Việc cha – con', 'việc con thừa hưởng hạn của cha; tự đặt hạn riêng thì sau đó cha đổi hạn cũng không ghi đè'],
-  ['Việc lặp lại', 'mở chi tiết → "Lặp lại" (mỗi ngày / tuần / tháng / năm). Hằng tuần thì bấm các THỨ (T2 T4…), hằng tháng thì gõ NGÀY ("15, cuối" — cuối tự biết 28/29/30/31), kèm GIỜ riêng cho mỗi kỳ. Tick xong thì lần kế tiếp tự sinh vào đúng ngày, không hiện lại ngay'],
+  ['Việc lặp lại', 'mở chi tiết → "Lặp lại" (mỗi ngày / tuần / tháng / năm). Hằng tuần thì bấm các THỨ (T2 T4…), hằng tháng thì gõ NGÀY ("15, cuối" — cuối tự biết 28/29/30/31), kèm GIỜ riêng cho mỗi kỳ. Tick xong thì lần kế tiếp tự sinh vào đúng ngày, không hiện lại ngay — và mỗi kỳ nằm ở ĐÚNG NGÀY của nó (kỳ của mai không chen vào "Hôm nay"). Bỏ tick thì thu hồi luôn kỳ vừa sinh, không để lại bản thừa'],
   ['Xoá việc', 'chuyển vào "Đã xoá" chứ không mất — khôi phục được bất cứ lúc nào; việc nằm trong đó quá 30 ngày sẽ bị dọn hẳn'],
   ['Đổi tên danh sách', 'rê chuột vào dòng danh sách ở sidebar → bấm ✎ để sửa tên ngay tại chỗ (Enter = lưu, Esc = bỏ); ✕ là xoá danh sách'],
   ['"Sắp tới" & "Đã hoàn thành"', 'gom thành thư mục theo từng ngày, bấm vào tên ngày để gập/mở'],
@@ -219,7 +219,7 @@ const ANATOMY = [
   ['Thụt vào 1 tab', 'Việc CON luôn thụt vào đúng 1 tab so với việc cha, để nhìn là biết ngay ai thuộc ai.'],
 ];
 const ROWBTN = [
-  ['☀ / ☁', 'Nút "Hôm nay của tôi" ở cuối mỗi dòng. ☀ = việc ĐANG nằm trong khung "Hôm nay của tôi"; ☁ = chưa. Việc đến hạn hôm nay hoặc việc lặp rơi vào hôm nay thì TỰ nằm sẵn (bấm cũng không bỏ ra được — bấm chỉ để xem lý do). Việc chưa có hạn thì mặc định KHÔNG nằm trong đó, bấm ☀ mới hiện.'],
+  ['☀ / ☁', 'Nút "Hôm nay của tôi" ở cuối mỗi dòng. ☀ = việc ĐANG nằm trong khung "Hôm nay của tôi"; ☁ = chưa. Việc đến hạn hôm nay hoặc việc lặp (không hạn) rơi vào hôm nay thì TỰ nằm sẵn (bấm cũng không bỏ ra được — bấm chỉ để xem lý do). Việc chưa có hạn thì mặc định KHÔNG nằm trong đó, bấm ☀ mới hiện.'],
   ['✕ (cuối dòng việc)', 'XOÁ VIỆC — có hỏi lại trước khi xoá, và chỉ chuyển vào "Đã xoá" chứ không mất: khôi phục được trong 30 ngày.'],
   ['✎ (sidebar, cạnh tên danh sách)', 'ĐỔI TÊN danh sách ngay tại chỗ: Enter = lưu, Esc = bỏ. Khác hẳn ✕ bên cạnh (✕ là xoá cả danh sách đó).'],
   ['◉ ⏰ ☀ ▤ ▢ ✓ 🗑', 'Biểu tượng các khung ở sidebar, theo thứ tự: Hôm nay · Trễ hẹn · Hôm nay của tôi · Sắp tới · Chưa có hạn · Đã hoàn thành · Đã xoá. Rê chuột lên từng mục để đọc mô tả.'],

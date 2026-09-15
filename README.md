@@ -108,7 +108,7 @@ Thêm xong app mở luôn bảng chi tiết và đặt con trỏ vào ô tiêu �
 | Mục | Nội dung |
 |---|---|
 | **Hôm nay của tôi** | Việc **đến hạn hôm nay** + việc **lặp rơi vào hôm nay** + việc **đã trễ** (tự động) cộng việc *bạn tự chọn bằng ☀*. Chia sẵn thành 4 nhóm: **Việc hôm nay · Trễ hẹn · Chưa có hạn (làm thường xuyên) · Tự chọn hạn sau**. Việc chưa có hạn **mặc định không nằm trong đây** — bấm ☀ mới vào. Việc đến hạn/lặp hôm nay thì luôn nằm trong đó (bấm cũng không bỏ ra được); chỉ việc **trễ** mới bỏ ra được, và mai tự hiện lại |
-| **Hôm nay** | Việc có hạn **đúng hôm nay**, cộng việc **lặp** có lịch rơi vào hôm nay (việc lặp thường không có hạn riêng) |
+| **Hôm nay** | Việc có hạn **đúng hôm nay**, cộng việc **lặp không hạn** có lịch rơi vào hôm nay (kỳ lặp **có** hạn riêng thì nằm ở đúng ngày của nó, không hiện sớm) |
 | **Trễ hẹn** | Việc **đã quá hạn**, gom theo **từng ngày đến hạn** — thư mục ghi rõ **trễ bao nhiêu ngày** |
 | **Sắp tới** | Việc có hạn trong những ngày tới, gom thành thư mục theo từng ngày |
 | **Chưa có hạn** | Việc chưa đặt ngày đến hạn |
@@ -149,7 +149,7 @@ Mở chi tiết → **Lặp lại** → chọn *Mỗi ngày / tuần / tháng / 
 - **Hằng tháng theo ngày**: chọn *Hằng tháng* rồi gõ ngày — ví dụ `15, cuối`. Chữ **cuối** tự hiểu ngày cuối tháng (tháng 2 là 28, tháng 4 là 30…), **đầu** là ngày 1. Ngày 31 gặp tháng ít ngày hơn sẽ lấy ngày cuối tháng đó.
 - **Mỗi N …**: ô "Mỗi (tuần)" = 2 nghĩa là cách 2 tuần một lần.
 
-Tick xong một việc lặp, app tự sinh lần kế tiếp vào **đúng ngày đến hạn mới** — lần mới không thừa hưởng trạng thái của lần vừa xong, nên không hiện lại ngay trong "Hôm nay của tôi".
+Tick xong một việc lặp, app tự sinh lần kế tiếp vào **đúng ngày đến hạn mới** — lần mới không thừa hưởng trạng thái của lần vừa xong, nên không hiện lại ngay trong "Hôm nay của tôi". Mỗi kỳ **đã có hạn riêng** thì nằm ở **đúng ngày của nó** (kỳ của mai/17-9 không chen vào "Hôm nay" hôm nay); chỉ việc lặp **không có hạn** mới để **lịch lặp** quyết định ngày. **Bỏ tick** thì app **thu hồi luôn kỳ vừa sinh** (tick lại vẫn chỉ 1 kỳ, không nhân bản).
 
 ### 7. Âm thanh khi xong việc
 
