@@ -318,13 +318,24 @@ body.mini .kids-tg { width: .72rem; font-size: .6rem; }
 .mini-list .row-title { font-size: .8rem; }
 .mini-list .badge { height: 1.15rem; font-size: .63rem; padding: 0 .35rem; }
 .mini-foot { padding: .22rem .45rem; border-top: 1px solid hsl(var(--border)); font-size: .66rem; display: flex; gap: .5rem; }
+/* Thanh mép khi thu gọn: đây là ĐƯỜNG DUY NHẤT để mở lại mini bằng chuột, nên phải LUÔN nhìn thấy được.
+   Hai lỗi thật đã gặp:
+   1) Tô bằng --primary, mà --primary bị accent của người dùng ghi đè (accent #3d3d3d -> hsl(0 0% 24%))
+      -> thanh xám gần đen trên nền tối = coi như biến mất.
+   2) Cửa sổ thu gọn KHÔNG nhỏ hơn được ~41 DIP (Windows ép) trong khi vị trí được tính theo tabSize=9
+      -> thanh lòi ra ngoài mép màn hình, chỉ còn ~11px nằm trong màn hình.
+   Nên: cửa sổ thu gọn luôn được xin >= 42 DIP (xem MIN_TAB trong lib/windows.js) và thanh phủ kín cửa
+   sổ; màu lấy từ --foreground nên luôn tương phản, không phụ thuộc accent. */
 .edge-tab {
-  width: 100%; height: 100%; border: 0; cursor: pointer; padding: 0; overflow: hidden;
-  background: hsl(var(--primary) / .7); color: hsl(var(--primary-foreground));
+  position: fixed; left: 0; top: 0; width: 100%; height: 100%;
+  padding: 0; cursor: pointer; overflow: hidden;
+  background: hsl(var(--foreground)); color: hsl(var(--background));
+  border: 1px solid hsl(var(--background)); box-shadow: 0 1px 6px rgb(0 0 0 / .45);
   border-radius: 5px; line-height: 1; display: flex; align-items: center; justify-content: center;
-  opacity: .85; transition: opacity .15s, background .15s;
+  font-size: 15px; font-weight: 700;
+  transition: background .15s;
 }
-.edge-tab:hover { opacity: 1; background: hsl(var(--primary)); }
+.edge-tab:hover { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); }
 
 /* ---------- bảng lọc (thay cho gõ cú pháp) ---------- */
 .bodywrap { flex: 1; display: flex; min-height: 0; }

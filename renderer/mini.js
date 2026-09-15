@@ -5,9 +5,12 @@ function miniView() {
   const edge = ui.miniEdge;
   const arrow = { right: '‹', left: '›', top: '⌄', bottom: '⌃' }[edge] || '‹';
   if (ui.miniCollapsed) {
+    // Thanh mép phủ kín cửa sổ thu gọn (cửa sổ đã được xin >= 42 DIP nên không bị Windows ép lệch nữa —
+    // xem MIN_TAB trong lib/windows.js). Trước đây thanh rộng 100% nhưng cửa sổ bị ép từ 9 -> 41 DIP,
+    // vùng vẽ lệch khỏi cửa sổ thật nên thanh gần như vô hình; lại thêm cỡ chữ = tabSize-1 (8px) không đọc được.
     const tab = h('button', {
-      class: 'edge-tab', title: 'Mở danh sách (hoặc dùng phím tắt)', dataset: { edge },
-      style: { fontSize: Math.max(6, (db.settings.tabSize || 10) - 1) + 'px' },
+      class: 'edge-tab', title: 'Mở danh sách (hoặc bấm phím tắt)',
+      dataset: { edge },
       onclick: () => API.mini.expand(),
     }, arrow);
     if (db.settings.peek !== false) tab.addEventListener('mouseenter', () => API.mini.peek(true));
