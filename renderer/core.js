@@ -78,6 +78,19 @@ function dayLabel(key) {
   const wd = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'][d.getDay()];
   return `${rel || wd} · ${md}`;
 }
+/* Nhãn 4 nhóm trong "Hôm nay của tôi" — khoá phải khớp T.MYDAY_SECTIONS (thứ tự nhóm lấy từ đó) */
+const MYDAY_LABEL = {
+  today: '◉ Việc hôm nay',
+  late: '⏰ Trễ hẹn',
+  nodate: '☀ Chưa có hạn (làm thường xuyên)',
+  pick: '☀ Tự chọn (hạn sau)',
+};
+/* Nhãn nhóm trong "Trễ hẹn": nói rõ TRỄ BAO LÂU chứ không chỉ lặp lại ngày đến hạn */
+function lateLabel(key, items) {
+  const n = Math.round((startOfDay(new Date()) - startOfDay(items[0].due)) / 864e5);
+  const [y, m, d] = key.split('-');
+  return `${n <= 1 ? 'Trễ từ hôm qua' : 'Trễ ' + n + ' ngày'} · ${d}/${m}/${y}`;
+}
 
 function hexToHsl(hex) {
   const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex || '');

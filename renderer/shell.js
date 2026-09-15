@@ -2,9 +2,9 @@
 /* Khung app: sidebar, topbar, thanh thêm việc, bảng lọc, bảng xác nhận xoá, hàm render tổng. */
 /* ---------------- sidebar ---------------- */
 const NAV_HELP = {
-  myday: 'Việc đến hạn hôm nay + việc đã trễ + việc bạn TỰ CHỌN (bấm ☁ ở mỗi việc để thêm vào, ☀ để bỏ ra)',
+  myday: 'Chia 4 nhóm: Việc hôm nay (◉) · Trễ hẹn (⏰) · Chưa có hạn — việc làm thường xuyên (☀) · Tự chọn hạn sau. Bấm ☀/☁ ở mỗi việc để thêm/bỏ khỏi danh sách này',
   today: 'Việc có HẠN đúng hôm nay (việc quá hạn nằm ở "Trễ hẹn")',
-  late: 'Gom MỌI việc đã quá hạn chót mà chưa xong — cũ nhất lên trước',
+  late: 'Việc đã quá hạn chót, gom theo TỪNG NGÀY đến hạn — thư mục ghi rõ trễ bao nhiêu ngày',
   upcoming: 'Việc có hạn trong những ngày tới, gom theo từng ngày',
   nodate: 'Việc chưa đặt ngày đến hạn',
   completed: 'Log việc đã xong, gom theo từng ngày',

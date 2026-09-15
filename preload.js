@@ -1,6 +1,6 @@
 'use strict';
 const { contextBridge, ipcRenderer } = require('electron');
-const { parseSmart, view, inMyDay, autoSchedule, stats, toggleDone, subtaskProgress, overdue, setDue, inheritDue } = require('./lib/tasks');
+const { parseSmart, view, inMyDay, myDaySection, MYDAY_SECTIONS, autoSchedule, stats, toggleDone, subtaskProgress, overdue, setDue, inheritDue } = require('./lib/tasks');
 
 contextBridge.exposeInMainWorld('api', {
   load: () => ipcRenderer.invoke('db:load'),
@@ -30,5 +30,5 @@ contextBridge.exposeInMainWorld('api', {
   addTask: (task) => ipcRenderer.invoke('task:add', task),
   testAlert: () => ipcRenderer.invoke('app:testAlert'),
   isMini: new URLSearchParams(location.search).get('mini') === '1',
-  T: { parseSmart, view, inMyDay, autoSchedule, stats, toggleDone, subtaskProgress, overdue, setDue, inheritDue },
+  T: { parseSmart, view, inMyDay, myDaySection, MYDAY_SECTIONS, autoSchedule, stats, toggleDone, subtaskProgress, overdue, setDue, inheritDue },
 });

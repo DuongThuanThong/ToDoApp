@@ -19,8 +19,8 @@ ToDoApp là app quản lý việc cá nhân, lấy cảm hứng từ TickTick, T
 | | |
 |---|---|
 | 📋 **5 kiểu xem** | Danh sách · Kanban · Lịch tháng · Timeline 14 ngày · Ma trận Eisenhower |
-| ☀ **Hôm nay của tôi** | Việc đến hạn hôm nay + việc đã trễ, **cộng** việc bạn tự chọn (bấm ☀). Bỏ một việc ra thì nó ẩn hết hôm nay, mai lại hiện |
-| ⏰ **Trễ hẹn** | Khung riêng gom mọi việc đã quá hạn chót — cũ nhất trước, để dọn dần |
+| ☀ **Hôm nay của tôi** | Chia **4 nhóm theo lý do**: Việc hôm nay (◉) · Trễ hẹn (⏰) · Chưa có hạn — việc làm thường xuyên (☀) · Tự chọn hạn sau. Bỏ một việc ra thì nó ẩn hết hôm nay, mai lại hiện |
+| ⏰ **Trễ hẹn** | Gom việc quá hạn theo **từng ngày đến hạn**, thư mục ghi rõ **trễ bao nhiêu ngày** |
 | 🌳 **Việc cha – con** | Việc con thừa hưởng hạn của cha, thu gọn/mở rộng từng nhóm |
 | ↻ **Việc lặp lại** | Mỗi ngày / tuần / tháng / năm. Tick xong, lần kế tiếp tự sinh vào đúng ngày |
 | 🖱 **Kéo thả** | Đổi thứ tự, đổi trạng thái, đổi hạn, đổi mức ưu tiên — kéo là xong |
@@ -101,9 +101,9 @@ Thêm xong app mở luôn bảng chi tiết và đặt con trỏ vào ô tiêu �
 
 | Mục | Nội dung |
 |---|---|
-| **Hôm nay của tôi** | Việc **có hạn hôm nay** + việc **đã trễ** (tự động) cộng việc *bạn tự chọn* — bấm ☀ ở mỗi dòng để thêm / bỏ ra |
+| **Hôm nay của tôi** | Việc **có hạn hôm nay** + việc **đã trễ** (tự động) cộng việc *bạn tự chọn* — và chia sẵn thành 4 nhóm: **Việc hôm nay · Trễ hẹn · Chưa có hạn (làm thường xuyên) · Tự chọn hạn sau**. Bấm ☀ ở mỗi dòng để thêm / bỏ ra |
 | **Hôm nay** | Việc có hạn **đúng hôm nay** |
-| **Trễ hẹn** | Gom mọi việc **đã quá hạn** chưa xong, cũ nhất lên trước |
+| **Trễ hẹn** | Việc **đã quá hạn**, gom theo **từng ngày đến hạn** — thư mục ghi rõ **trễ bao nhiêu ngày** |
 | **Sắp tới** | Việc có hạn trong những ngày tới, gom thành thư mục theo từng ngày |
 | **Chưa có hạn** | Việc chưa đặt ngày đến hạn |
 | **Đã hoàn thành** | Log việc đã xong, gom theo ngày hoàn thành |

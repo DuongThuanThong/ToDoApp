@@ -1,19 +1,29 @@
 'use strict';
 /* Các chế độ xem: danh sách, kanban, lịch, timeline, ma trận Eisenhower. */
 /* ---------------- list view ---------------- */
-// Gom theo NGÀY -> mỗi ngày là 1 thư mục gập/mở được (log cho dễ nhìn, không phải 1 danh sách dài)
-// openFirst: mở sẵn thư mục đầu tiên (dùng cho "Sắp tới" — việc gần nhất phải thấy ngay)
-function groupByDay(list, stampKey, renderRow, openFirst = false) {
+// Gom nhóm gập/mở được, dùng chung cho mọi kiểu "thư mục" (theo ngày, theo lý do):
+// openKey = nhóm luôn mở · openFirst = mở nhóm đầu tiên · 'all' = mở hết (danh sách cần xử lý ngay)
+// order = thứ tự nhóm cố định; bỏ trống thì giữ thứ tự xuất hiện (dùng cho list đã sort sẵn)
+function groupBy(list, keyFn, labelFn, renderRow, { openKey = null, openFirst = false, order = null } = {}) {
   const g = new Map();
-  for (const t of list) {
-    const k = t[stampKey] ? ymd(t[stampKey]) : '';
-    if (!g.has(k)) g.set(k, []);
-    g.get(k).push(t);
-  }
-  const today = ymd(new Date());
-  return h('div', { class: 'groups' }, ...[...g].map(([k, items], i) => h('details', { class: 'group', open: k === today || (openFirst && i === 0) },
-    h('summary', null, h('span', null, dayLabel(k)), h('span', { class: 'gct' }, items.length + ' việc')),
-    h('div', { class: 'gbody' }, ...items.map(renderRow)))));
+  for (const t of list) { const k = keyFn(t); if (!g.has(k)) g.set(k, []); g.get(k).push(t); }
+  const entries = order ? [...g].sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0])) : [...g];
+  return h('div', { class: 'groups' }, ...entries.map(([k, items], i) => h('details', {
+    class: 'group', open: k === openKey || openFirst === 'all' || (openFirst === true && i === 0),
+  },
+    h('summary', null, h('span', null, labelFn(k, items, i)), h('span', { class: 'gct' }, items.length + ' việc')),
+    h('div', { class: 'gbody' }, ...items.map(renderRow).flat()))));
+}
+// Gom theo NGÀY -> mỗi ngày là 1 thư mục gập/mở được (log cho dễ nhìn, không phải 1 danh sách dài)
+function groupByDay(list, stampKey, renderRow, openFirst = false, labelFn = dayLabel) {
+  return groupBy(list, (t) => (t[stampKey] ? ymd(t[stampKey]) : ''), labelFn, renderRow,
+    { openKey: ymd(new Date()), openFirst });
+}
+// 1 việc + các việc CON ngay dưới (thu gọn được) — dùng chung cho mọi danh sách
+function rowFull(t) {
+  const kids = kidsOf(t.id);
+  return [row(t, { fold: kids.length }),
+    ...(ui.fold[t.id] ? [] : kids.map((k, i) => row(k, { sub: true, last: i === kids.length - 1 })))];
 }
 
 /* ---------------- thùng rác (đã xoá) ---------------- */
@@ -46,21 +56,26 @@ function listView() {
   // "Đã hoàn thành" xem như log: gom theo ngày hoàn thành
   if (ui.view === 'completed') {
     if (!tasks.length) return h('div', { class: 'empty' }, 'Chưa hoàn thành việc nào.');
-    return groupByDay(tasks, 'doneAt', (t) => row(t));
+    return groupByDay(tasks, 'doneAt', rowFull);
   }
   // "Sắp tới" cũng là log theo thời gian: gom theo ngày đến hạn, gần nhất trước, mở sẵn ngày gần nhất
   if (ui.view === 'upcoming') {
     if (!tasks.length) return h('div', { class: 'empty' }, 'Không có việc nào sắp tới. Việc mới có hạn sẽ hiện ở đây.');
-    return groupByDay([...tasks].sort((a, b) => new Date(a.due || 8.64e15) - new Date(b.due || 8.64e15)), 'due', (t) => row(t), true);
+    return groupByDay([...tasks].sort((a, b) => new Date(a.due || 8.64e15) - new Date(b.due || 8.64e15)), 'due', rowFull, true);
+  }
+  // "Trễ hẹn": gom theo NGÀY ĐẾN HẠN (trễ của ngày nào) + nói rõ TRỄ BAO LÂU. Mở hết vì đây là việc cần dọn.
+  if (ui.view === 'late') {
+    if (!tasks.length) return h('div', { class: 'empty' }, 'Không có việc nào trễ hẹn 🎉');
+    return groupByDay(tasks, 'due', rowFull, 'all', lateLabel);
+  }
+  // "Hôm nay của tôi": chia rõ theo LÝ DO (việc hôm nay / trễ / chưa có hạn / tự chọn) thay vì 1 danh sách trộn
+  if (ui.view === 'myday') {
+    if (!tasks.length) return h('div', { class: 'empty' }, 'Chưa có việc nào cho hôm nay. Bấm ☀ ở một việc để thêm vào đây.');
+    return groupBy(tasks, (t) => T.myDaySection(t), (k) => MYDAY_LABEL[k] || k, rowFull,
+      { openFirst: 'all', order: T.MYDAY_SECTIONS });
   }
   if (!tasks.length) return h('div', { class: 'empty' }, 'Chưa có việc nào. Gõ vào ô thêm việc ở trên — thử: Họp team #cv !cao 15h mai ~45p');
-  const box = h('div');
-  for (const t of tasks) {
-    const kids = kidsOf(t.id);   // việc con nằm ngay dưới cha + có đường nối, thu gọn được
-    box.append(row(t, { fold: kids.length }));
-    if (!ui.fold[t.id]) kids.forEach((k, i) => box.append(row(k, { sub: true, last: i === kids.length - 1 })));
-  }
-  return box;
+  return h('div', null, ...tasks.map(rowFull).flat());
 }
 
 /* ---------------- kanban ---------------- */
