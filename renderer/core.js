@@ -181,6 +181,7 @@ const ui = {
   f: { ...F_EMPTY },               // bộ lọc có cấu trúc (bảng lọc, không gõ tay)
   confirm: null,                   // id việc đang chờ xác nhận xoá
   newList: false,
+  renameList: null,   // id danh sách đang sửa tên tại chỗ ở sidebar (null = không sửa)
 };
 let dragId = null, dragEnd = 0, pendingDb = null, toastTimer = [], miniAddInput = null;   // dragEnd: chặn click mở chi tiết ngay sau khi kéo
 const typing = () => /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '');

@@ -2,8 +2,8 @@
 /* Khung app: sidebar, topbar, thanh thêm việc, bảng lọc, bảng xác nhận xoá, hàm render tổng. */
 /* ---------------- sidebar ---------------- */
 const NAV_HELP = {
-  myday: 'Chia 4 nhóm: Việc hôm nay (◉) · Trễ hẹn (⏰) · Chưa có hạn — việc làm thường xuyên (☀) · Tự chọn hạn sau. Bấm ☀/☁ ở mỗi việc để thêm/bỏ khỏi danh sách này',
-  today: 'Việc có HẠN đúng hôm nay (việc quá hạn nằm ở "Trễ hẹn")',
+  myday: 'Chia 4 nhóm: Việc hôm nay (◉) · Trễ hẹn (⏰) · Chưa có hạn — việc làm thường xuyên (☀) · Tự chọn hạn sau. Việc LẶP có lịch rơi vào hôm nay tự vào đây. Bấm ☀/☁ ở mỗi việc để thêm/bỏ khỏi danh sách này',
+  today: 'Việc có HẠN đúng hôm nay, cộng việc LẶP có lịch rơi vào hôm nay (việc quá hạn nằm ở "Trễ hẹn")',
   late: 'Việc đã quá hạn chót, gom theo TỪNG NGÀY đến hạn — thư mục ghi rõ trễ bao nhiêu ngày',
   upcoming: 'Việc có hạn trong những ngày tới, gom theo từng ngày',
   nodate: 'Việc chưa đặt ngày đến hạn',
@@ -12,8 +12,11 @@ const NAV_HELP = {
 };
 function sidebar() {
   const count = (id) => (id === 'trash' ? (db.trash || []).length : T.view(db.tasks, id).length);
+  // Log (Đã hoàn thành / Đã xoá) chỉ để xem lại — con số ở đó chỉ gây nhiễu, không cần đếm.
+  const NO_COUNT = ['completed', 'trash'];
   const nav = (id, icon, name) => h('button', { class: 'nav' + (ui.view === id ? ' on' : ''), title: NAV_HELP[id] || name, onclick: () => { ui.view = id; render(); } },
-    h('span', { class: 'ic' }, icon), h('span', null, name), h('span', { class: 'ct' }, count(id) || ''));
+    h('span', { class: 'ic' }, icon), h('span', null, name),
+    NO_COUNT.includes(id) ? null : h('span', { class: 'ct' }, count(id) || ''));
 
   const side = h('aside', { class: 'sidebar' },
     h('div', { class: 'brand drag' }, h('img', { class: 'brand-ic', src: ICON_SRC, alt: '' }), h('span', null, 'ToDoApp')),
@@ -21,9 +24,24 @@ function sidebar() {
       ...VIEWS.map((v) => nav(...v)),
       h('div', { class: 'side-hint' }, '☀ = việc bạn tự chọn · ◉ = hạn hôm nay · ⏰ = đã trễ hẹn'),
       h('div', { class: 'side-lbl' }, 'Danh sách'),
-      ...db.lists.map((l) => h('button', { class: 'nav' + (ui.view === l.id ? ' on' : ''), onclick: () => { ui.view = l.id; render(); } },
-        h('span', { class: 'ic' }, '#'), h('span', null, l.name), h('span', { class: 'ct' }, count(l.id) || ''),
-        h('span', { class: 'ic', style: { marginLeft: '.2rem' }, onclick: (e) => { e.stopPropagation(); db.lists = db.lists.filter((x) => x.id !== l.id); commit(); render(); } }, '✕'))),
+      // Danh sách: bấm tên để xem · ✎ đổi tên (sửa ngay tại chỗ) · ✕ xoá
+      ...db.lists.map((l) => (ui.renameList === l.id
+        ? (() => {
+          const i = h('input', {
+            class: 'input', value: l.name, style: { margin: '.1rem 0', height: '1.9rem' },
+            onkeydown: (e) => {
+              if (e.key === 'Enter') { const v = e.target.value.trim(); if (v) l.name = v; ui.renameList = null; commit(); render(); }
+              if (e.key === 'Escape') { ui.renameList = null; render(); }
+            },
+            onblur: () => { if (ui.renameList === l.id) { ui.renameList = null; commit(); render(); } },
+          });
+          setTimeout(() => { i.focus(); i.select(); }, 0);
+          return i;
+        })()
+        : h('button', { class: 'nav' + (ui.view === l.id ? ' on' : ''), onclick: () => { ui.view = l.id; render(); } },
+          h('span', { class: 'ic' }, '#'), h('span', null, l.name), h('span', { class: 'ct' }, count(l.id) || ''),
+          h('span', { class: 'ic', title: 'Đổi tên danh sách', onclick: (e) => { e.stopPropagation(); ui.renameList = l.id; render(); } }, '✎'),
+          h('span', { class: 'ic', title: 'Xoá danh sách', onclick: (e) => { e.stopPropagation(); db.lists = db.lists.filter((x) => x.id !== l.id); commit(); render(); } }, '✕')))),
       ui.newList ? (() => {
         const i = h('input', { class: 'input', placeholder: 'Tên danh sách…', style: { marginTop: '.3rem', height: '1.9rem' }, onkeydown: (e) => { if (e.key === 'Enter' && e.target.value.trim()) { db.lists.push({ id: uid(), name: e.target.value.trim(), folderId: null }); ui.newList = false; commit(); render(); } if (e.key === 'Escape') { ui.newList = false; render(); } } });
         setTimeout(() => i.focus(), 0);

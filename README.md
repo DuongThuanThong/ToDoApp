@@ -102,13 +102,13 @@ Thêm xong app mở luôn bảng chi tiết và đặt con trỏ vào ô tiêu �
 | Mục | Nội dung |
 |---|---|
 | **Hôm nay của tôi** | Việc **có hạn hôm nay** + việc **đã trễ** (tự động) cộng việc *bạn tự chọn* — và chia sẵn thành 4 nhóm: **Việc hôm nay · Trễ hẹn · Chưa có hạn (làm thường xuyên) · Tự chọn hạn sau**. Bấm ☀ ở mỗi dòng để thêm / bỏ ra |
-| **Hôm nay** | Việc có hạn **đúng hôm nay** |
+| **Hôm nay** | Việc có hạn **đúng hôm nay**, cộng việc **lặp** có lịch rơi vào hôm nay (việc lặp thường không có hạn riêng) |
 | **Trễ hẹn** | Việc **đã quá hạn**, gom theo **từng ngày đến hạn** — thư mục ghi rõ **trễ bao nhiêu ngày** |
 | **Sắp tới** | Việc có hạn trong những ngày tới, gom thành thư mục theo từng ngày |
 | **Chưa có hạn** | Việc chưa đặt ngày đến hạn |
 | **Đã hoàn thành** | Log việc đã xong, gom theo ngày hoàn thành |
 | **Đã xoá** | Thùng rác — khôi phục được, chỉ mất khi bạn bấm "Dọn sạch" |
-| **Inbox / danh sách riêng** | Tự tạo bao nhiêu danh sách cũng được (nút "Danh sách mới") |
+| **Inbox / danh sách riêng** | Tự tạo bao nhiêu danh sách cũng được (nút "Danh sách mới"). Bấm **✎** cạnh tên danh sách để **đổi tên ngay tại chỗ** (Enter = lưu, Esc = bỏ), **✕** để xoá |
 
 Bấm vào tên một ngày để gập/mở thư mục đó.
 
